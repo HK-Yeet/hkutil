@@ -12,14 +12,14 @@ Inital Setup
 Inside your main file
 ```js
 const { Client } = require("discord.js");
-const HKutil = require("hkutilties");
-const config = require("config.json")
+const HKutil = require("hkutilities");
+const config = require("./config.json");
 const bot = new Client();
-bot.config = config
+bot.config = config;
 
-new HKutil.HKandler(bot, "commands", "events")
+new HKutil.HKandler(bot);
 
-bot.login(bot.config.token)
+bot.login(bot.config.token);
 ```
 Inside config.json
 ```json
