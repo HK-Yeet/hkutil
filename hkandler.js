@@ -1,5 +1,5 @@
 const { Collection } = require("discord.js");
-const commandHandler = require("hkandler/handlers");
+const handlers = require("hkutilities/functions/handlers");
 
 class HKandler {
   _commandsDir = "commands";
@@ -33,8 +33,8 @@ class HKandler {
     } else {
       bot.commands = new Collection();
     }
-    eventHandler(bot, eventsDir);
-    commandHandler(bot, commandsDir);
+    handlers.eventHandler(bot, eventsDir);
+    handlers.commandHandler(bot, commandsDir);
   }
 }
 module.exports = HKandler;

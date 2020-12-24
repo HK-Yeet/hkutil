@@ -1,3 +1,3 @@
-const { eventHandler, commandHandler} = require("hkandler/handlers");
-const HKandler = require("hkandler/hkandler");
-module.exports = { HKandler, commandHandler, eventHandler };
+const HKandler = require("hkutilies/hkandler");
+const utils = require("hkutilities/functions/utilFunctions");
+module.exports = { HKandler, utils };
