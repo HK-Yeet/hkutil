@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-function cannon(message) {
+function filter(message) {
   if (message.author.bot) {
     return true;
   } else if (!message.guild) {

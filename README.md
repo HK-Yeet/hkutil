@@ -57,10 +57,10 @@ const HKutil = require("hkutilities");
 module.exports = (bot, message) => {
   const { prefix } = bot.config;
   /*
-  let's use the cannon function to check if message is from a bot or the message is in dm's
-  cannnon takes 1 paramter; message
+  let's use the cannon filter to check if message is from a bot or the message is in dm's
+  filter takes 1 paramter; message
   */
-  if (HKutil.utils.cannon(message)) return;
+  if (HKutil.utils.filter(message)) return;
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
