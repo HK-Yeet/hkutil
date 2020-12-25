@@ -1,15 +1,17 @@
 # HKUtilities
+
 Sicko mode utilities for command, event, and functions.
 
 # Installation
+
+Inital Setup
 
 ```bash
 npm install hkutilities
 ```
 
-Inital Setup
-
 Inside your main file
+
 ```js
 const { Client } = require("discord.js");
 const HKutil = require("hkutilities");
@@ -17,17 +19,22 @@ const config = require("./config.json");
 const bot = new Client();
 bot.config = config;
 
-new HKutil.HKandler(bot);
+new HKutil.HKandler(bot); 
+/*
+optional: pass in your commands and events directory so that the handler will know where to which folders to go to
+it is defaulted to "commands" and "events
+*/
 
 bot.login(bot.config.token);
 ```
-Inside config.json
-```json
 
-  {
-    "prefix": "!",
-    "token": "Your bot token"
-  }
+Inside config.json
+
+```json
+{
+  "prefix": "!",
+  "token": "Your bot token"
+}
 ```
 
 # Making Events
@@ -37,10 +44,8 @@ Example of a ready event
 ```js
 //inside your events directory
 module.exports = (bot) => {
-
-  console.log(`Logged in as ${bot.user.tag}`)
-
-}
+  console.log(`Logged in as ${bot.user.tag}`);
+};
 ```
 
 Example of a message event
@@ -48,9 +53,15 @@ Example of a message event
 ```js
 //inside your events directory
 
+const HKutil = require("hkutilities");
 module.exports = (bot, message) => {
-  const { prefix } = bot;
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  const { prefix } = bot.config;
+  /*
+  let's use the cannon function to check if message is from a bot or the message is in dm's
+  cannnon takes 1 paramter; message
+  */
+  if (HKutil.utils.cannon(message)) return;
+  if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
@@ -59,10 +70,13 @@ module.exports = (bot, message) => {
   if (!command) return;
 
   try {
-      command.execute(bot, message, args)
+    command.execute(bot, message, args);
   } catch (error) {
-      message.channel.send(`There was an error running the command **${command.name}**`)
-      console.log(error)
+    /*
+    let's use the error embed function
+    errorEmbed takes in 2 parameters; the channel, and the "error"
+    */
+    HKutil.utils.errorEmbed(message.channel, error);
   }
 };
 ```
@@ -73,18 +87,18 @@ This is a simple ping command. Using `ping`, `pong`, and `p` will all run this c
 
 ```js
 //inside your command directory
-const Discord = require("discord.js")
+const Discord = require("discord.js");
 module.exports = {
   name: "ping",
-  aliases: ['pong', "p"], // Optional
-  execute(bot, message, args){
+  aliases: ["pong", "p"], // Optional
+  execute(bot, message, args) {
     let pingEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Pong!")
-      .setDescription(`API Latency: ${bot.ws.ping}ms!`)
-     message.channel.send(pingEmbed)
-  }
-}
+      .setDescription(`API Latency: ${bot.ws.ping}ms!`);
+    message.channel.send(pingEmbed);
+  },
+};
 ```
 
 # Final Code
