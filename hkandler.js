@@ -5,12 +5,11 @@ class HKandler {
   _commandsDir = "commands";
   _eventsDir = "events";
   _showWarns = true;
-  _something;
 
   constructor(bot, commandsDir, eventsDir, showWarns = true) {
     if (!bot) {
       throw new Error(
-        "HKandler ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/hkandler"
+        "HKandler ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord"
       );
     }
     if (showWarns && !commandsDir) {
@@ -28,7 +27,7 @@ class HKandler {
     }
     if (bot.commands) {
       throw new Error(
-        "HKandler ❯ Please remove the definition of <client>.commands ❯ Need further assistance? Join the discord https://hk-yeet.github.io/hkandler"
+        "HKandler ❯ Please remove the definition of <client>.commands ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord"
       );
     } else {
       bot.commands = new Collection();

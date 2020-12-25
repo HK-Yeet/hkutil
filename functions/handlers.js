@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const checkProperties = require("hkutilities/functions/checkProperties");
 
 function eventHandler(bot, dir) {
   if (dir) {
@@ -34,8 +35,10 @@ function commandHandler(bot, dir) {
           if (file.endsWith(".js")) {
             const command = require(path.join(dir, file));
             const commandName = file.split(".")[0];
-            bot.commands.set(command.name, command);
-            console.log(`HKandler ❯ Loading command ❯ ${commandName}`);
+            if (checkProperties(commandName, command)) {
+              bot.commands.set(command.name, command);
+              console.log(`HKandler ❯ Loading command ❯ ${commandName}`);
+            }
           }
         }
       }
