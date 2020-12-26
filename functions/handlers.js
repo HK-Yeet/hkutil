@@ -42,7 +42,7 @@ function commandHandler(bot, dir) {
     }
 }
 
-function featureHandler(bot, dir){
+module.exports = function featureHandler(bot, dir){
     if (existsSync(dir)) {
       const files = readdirSync(dir);
       for (const file of files) {
@@ -54,7 +54,7 @@ function featureHandler(bot, dir){
             const feature = require(join(dir, file))
             const featureName = file.split(".")[0];
             console.log(`HKandler ❯ Loading feature ❯ ${featureName}`)
-            feature(client)
+            feature(bot)
           }
         }
       }

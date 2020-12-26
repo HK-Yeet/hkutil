@@ -61,7 +61,7 @@ module.exports = (bot, message) => {
   let's use the cannon filter to check if message is from a bot or the message is in dm's
   filter takes 1 paramter; message
   */
-  if (HKutil.util.filter(message)) return;
+  if (HKutil.filter(message)) return;
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
@@ -114,7 +114,7 @@ module.exports = (bot) => {
 
   bot.on("message", message => {
 
-    if(HKutil.util.filter(message)) return
+    if(HKutil.filter(message)) return
     if(message.channel.name == "suggestions"){
       message.react("✅");
       message.react("❌");
