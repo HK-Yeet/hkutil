@@ -19,9 +19,7 @@ const config = require("./config.json");
 const bot = new Client();
 bot.config = config;
 
-new HKutil.HKandler(bot)
-  .setCommandsDir("commands")
-  .setEventsDir("events")
+new HKutil.HKandler(bot, "commands", "events")
   .setFeatures("features") //more about it below!
 /*
 optional: pass in your commands and events directory so that the handler will know where to which folders to go to
