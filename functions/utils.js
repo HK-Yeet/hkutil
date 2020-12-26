@@ -28,4 +28,4 @@ function errorEmbed(channel, content) {
   return channel.send(embed);
 }
 
-module.exports = { cannon, quickEmbed, successEmbed, errorEmbed };
+module.exports = { filter, quickEmbed, successEmbed, errorEmbed };
