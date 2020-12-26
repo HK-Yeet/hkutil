@@ -19,7 +19,10 @@ const config = require("./config.json");
 const bot = new Client();
 bot.config = config;
 
-new HKutil.HKandler(bot); 
+new HKutil.HKandler(bot)
+  .setCommandsDir("commands")
+  .setEventsDir("events")
+  .setFeatures("features") //more about it below!
 /*
 optional: pass in your commands and events directory so that the handler will know where to which folders to go to
 it is defaulted to "commands" and "events
@@ -60,7 +63,7 @@ module.exports = (bot, message) => {
   let's use the cannon filter to check if message is from a bot or the message is in dm's
   filter takes 1 paramter; message
   */
-  if (HKutil.filter(message)) return;
+  if (HKutil.util.filter(message)) return;
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
@@ -101,6 +104,28 @@ module.exports = {
 };
 ```
 
+# Features
+
+Features are a cool feature that Worn Off Keys made. They are side functions, that run along side your bot. Instead of putting them in the main event files. 
+
+Example for a suggestions channel: 
+
+```js
+const HKutil = require("hkutilities");
+module.exports = (bot) => {
+
+  bot.on("message", message => {
+
+    if(HKutil.util.filter(message)) return
+    if(message.channel.name == "suggestions"){
+      message.react("✅");
+      message.react("❌");
+    }
+
+  })
+
+}
+
 # Final Code
 
 With all that done, your treefile should look somthing similar to this.
@@ -109,6 +134,8 @@ With all that done, your treefile should look somthing similar to this.
 HKBot/
 ┣ commands/
 ┃ ┗ ping.js
+┣ features/
+┃ ┗ suggestions.js
 ┣ events/
 ┃ ┣ message.js
 ┃ ┗ ready.js
