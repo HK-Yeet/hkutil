@@ -1,18 +1,17 @@
-const fs = require("fs");
-const path = require("path");
+const {existsSync, lstatSync, readdirSync} = require("fs");
+const {join} = require("path");
 const checkProperties = require("hkutilities/functions/checkProperties");
 
 function eventHandler(bot, dir) {
-  if (dir) {
-    if (fs.existsSync(dir)) {
-      const files = fs.readdirSync(dir);
+    if (existsSync(dir)) {
+      const files = readdirSync(dir);
       for (const file of files) {
-        const stat = fs.lstatSync(path.join(dir, file));
+        const stat = lstatSync(join(dir, file));
         if (stat.isDirectory()) {
-          eventHandler(bot, path.join(dir, file));
+          eventHandler(bot, join(dir, file));
         } else {
           if (file.endsWith(".js")) {
-            const event = require(path.join(dir, file));
+            const event = require(join(dir, file));
             const eventName = file.split(".")[0];
             bot.on(eventName, event.bind(null, bot));
             console.log(`HKandler ❯ Loading event ❯ ${eventName}`);
@@ -20,20 +19,18 @@ function eventHandler(bot, dir) {
         }
       }
     }
-  }
 }
 
 function commandHandler(bot, dir) {
-  if (dir) {
-    if (fs.existsSync(dir)) {
-      const files = fs.readdirSync(dir);
+    if (existsSync(dir)) {
+      const files = readdirSync(dir);
       for (const file of files) {
-        const stat = fs.lstatSync(path.join(dir, file));
+        const stat = lstatSync(join(dir, file));
         if (stat.isDirectory()) {
-          commandHandler(bot, path.join(dir, file));
+          eventHandler(bot, join(dir, file));
         } else {
           if (file.endsWith(".js")) {
-            const command = require(path.join(dir, file));
+            const command = require(join(dir, file));
             const commandName = file.split(".")[0];
             if (checkProperties(commandName, command)) {
               bot.commands.set(command.name, command);
@@ -43,6 +40,24 @@ function commandHandler(bot, dir) {
         }
       }
     }
-  }
 }
-module.exports = { eventHandler, commandHandler };
+
+function featureHandler(bot, dir){
+    if (existsSync(dir)) {
+      const files = readdirSync(dir);
+      for (const file of files) {
+        const stat = lstatSync(join(dir, file));
+        if (stat.isDirectory()) {
+          featureHandler(bot, join(dir, file));
+        } else {
+          if (file.endsWith(".js")) {
+            const feature = require(join(dir, file))
+            const featureName = file.split(".")[0];
+            console.log(`HKandler ❯ Loading feature ❯ ${featureName}`)
+            feature(client)
+          }
+        }
+      }
+    }
+}
+module.exports = { eventHandler, commandHandler, featureHandler };
