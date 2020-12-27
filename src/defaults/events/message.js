@@ -1,7 +1,8 @@
 const { errorEmbed } = require("hkutilities/src/functions/utils");
 
 module.exports = (bot, message) => {
-  const prefix = bot.prefix
+  const prefix = bot.prefix;
+  if (!message.content.startWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command =
@@ -9,15 +10,15 @@ module.exports = (bot, message) => {
   if (!command) return;
 
   try {
-    command.execute(bot, message, args)
+    command.execute(bot, message, args);
   } catch (error) {
     try {
-      command.callback(bot, message, args)
+      command.callback(bot, message, args);
     } catch (error) {
       try {
-        command.run(bot, message, args)
+        command.run(bot, message, args);
       } catch (error) {
-        errorEmbed(message.channel, error)
+        errorEmbed(message.channel, error);
       }
     }
   }
