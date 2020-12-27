@@ -28,7 +28,7 @@ function commandHandler(bot, dir) {
     } else {
       if (file.endsWith(".js")) {
         const command = require(join(dir, file));
-        const commandName = file.split(".")[0];
+        const commandName = command.name;
         if (checkProperties(commandName, command)) {
           bot.commands.set(command.name, command);
           console.log(`HKUtilities ❯ Loading command ❯ ${commandName}`);
@@ -61,7 +61,7 @@ function loadDefaultCommands(bot) {
   const files = readdirSync(dir);
   for (const file of files) {
     const command = require(join(dir, file));
-    const commandName = file.split(".")[0];
+    const commandName = command.name;
     if (bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName)))
       return;
     console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);

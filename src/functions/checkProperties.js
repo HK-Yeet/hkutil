@@ -10,6 +10,17 @@ function checkProperties(commandName, command) {
       `HKUtilities ❯ ${commandName} ❯ Name provided isn't a string ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
     );
   }
+  //categories
+  if (!command.hasOwnProperty("category")) {
+    throw new Error(
+      `HKUtilities ❯ ${commandName} ❯ Does not have property "category" ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+    );
+  }
+  if (typeof command.category != "string") {
+    throw new Error(
+      `HKUtilities ❯ ${commandName} ❯ Category provided isn't a string ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+    );
+  }
   //check for aliases
   if (command.hasOwnProperty("aliases")) {
     if (!Array.isArray(command.aliases)) {
