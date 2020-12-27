@@ -1,6 +1,6 @@
 const {existsSync, lstatSync, readdirSync} = require("fs");
 const {join} = require("path");
-const checkProperties = require("hkutilities/functions/checkProperties");
+const checkProperties = require("hkutilities/src/functions/checkProperties");
 
 function eventHandler(bot, dir) {
     if (existsSync(dir)) {

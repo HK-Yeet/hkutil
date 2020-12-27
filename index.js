@@ -1,7 +1,7 @@
-const { filter, quickEmbed, successEmbed, errorEmbed } = require("hkutilities/functions/utils");
+const { filter, quickEmbed, successEmbed, errorEmbed } = require("hkutilities/src/functions/utils");
 module.exports = {
   //Handler
-  HKandler: require("hkutilities/classes/hkandler"),
+  HKandler: require("hkutilities/src/classes/hkandler"),
   //Functions
   filter,
   quickEmbed,

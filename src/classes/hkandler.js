@@ -5,7 +5,7 @@ const {
     commandHandler,
     eventHandler,
     featureHandler
-} = require("hkutilities/functions/handlers");
+} = require("hkutilities/src/functions/handlers");
 const {
     join
 } = require("path")
