@@ -27,6 +27,12 @@ class HKandler {
         } else {
             bot.commands = new Collection();
         }
+        if (!commandsDir) {
+            console.warn('HKandler ❯ No commands folder prvided, using "commands"');
+          }
+          if (!eventsDir) {
+            console.warn('HKandler ❯ No events folder provided, using "events"');
+          }
         if (module && require.main) {
             const {
                 path
