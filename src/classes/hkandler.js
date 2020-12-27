@@ -5,6 +5,7 @@ class HKandler {
   _bot;
   _commandsDir = "commands";
   _eventsDir = "events";
+  _prefix = "!"
   constructor(bot, commandsDir, eventsDir) {
     this._bot = bot;
     if (!bot) {
@@ -39,6 +40,14 @@ class HKandler {
   }
   getFeaturesDir() {
     return this._featuresDir;
+  }
+  setPrefix(prefix){
+    this._prefix = prefix
+    this._bot.prefix = this._prefix
+    return this
+  }
+  getPrefix(){
+    return this._prefix
   }
   loadFeatures(dir) {
     const { path } = require.main;

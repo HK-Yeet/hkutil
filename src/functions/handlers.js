@@ -1,6 +1,7 @@
-const { existsSync, lstatSync, readdirSync } = require("fs");
+const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
 const checkProperties = require("hkutilities/src/functions/checkProperties");
+let setEvents = [];
 
 function eventHandler(bot, dir) {
   const files = readdirSync(dir);
@@ -14,9 +15,11 @@ function eventHandler(bot, dir) {
         const eventName = file.split(".")[0];
         bot.on(eventName, event.bind(null, bot));
         console.log(`HKUtilities ❯ Loading event ❯ ${eventName}`);
+        setEvents.push(eventName);
       }
     }
   }
+  loadDefaultEvents(bot);
 }
 
 function commandHandler(bot, dir) {
@@ -56,6 +59,18 @@ function featureHandler(bot, dir) {
   }
 }
 
+function loadDefaultEvents(bot) {
+  const dir = join(__dirname, "..", "defaults", "events");
+  const files = readdirSync(dir);
+  for (const file of files) {
+    const event = require(join(dir, file));
+    const eventName = file.split(".")[0];
+    if (setEvents.find(eventName)) return;
+    console.log(`HKUtilities ❯ Loading default event ❯ ${eventName}`);
+    bot.on(eventName, event.bind(null, bot));
+  }
+}
+
 function loadDefaultCommands(bot) {
   const dir = join(__dirname, "..", "defaults", "commands");
   const files = readdirSync(dir);
@@ -68,4 +83,5 @@ function loadDefaultCommands(bot) {
     bot.commands.set(command.name, command);
   }
 }
+
 module.exports = { eventHandler, commandHandler, featureHandler };
