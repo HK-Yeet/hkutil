@@ -9,6 +9,42 @@ module.exports = (bot, message) => {
     bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
   if (!command) return;
 
+  if (command.clientPerms) {
+    let { clientPerms } = command;
+    let hasPermission = true;
+    if (typeof permissions === "string") {
+      permissions = [permissions];
+    }
+
+    for (const permission of clientPerms) {
+      if (!message.member.hasPermission(permission)) {
+        hasPermission = false;
+        return;
+      }
+      if (hasPermission) {
+        continue;
+      }
+    }
+  }
+
+  if (command.userPerms) {
+    let { userPerms } = command;
+    let hasPermission = true;
+    if (typeof permissions === "string") {
+      permissions = [permissions];
+    }
+
+    for (const permission of userPerms) {
+      if (!message.member.hasPermission(permission)) {
+        hasPermission = false;
+        return errorEmbed(message.channel, "You do not have permission to use this command!");
+      }
+      if (hasPermission) {
+        continue;
+      }
+    }
+  }
+
   try {
     command.execute(bot, message, args);
   } catch (error) {

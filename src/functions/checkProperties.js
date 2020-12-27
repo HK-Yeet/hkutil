@@ -12,7 +12,7 @@ function checkProperties(commandName, command) {
   }
   //categories
   if (!command.hasOwnProperty("category")) {
-    throw new Error(
+    console.warn(
       `HKUtilities ❯ ${commandName} ❯ Does not have property "category" ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
     );
   }

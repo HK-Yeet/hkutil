@@ -17,16 +17,16 @@ const { Client } = require("discord.js");
 const HKutil = require("hkutilities");
 const config = require("./config.json");
 const bot = new Client();
-bot.config = config;
 
 new HKutil.HKandler(bot, "commands", "events")
-  .setFeatures("features") //more about it below!
+  .setPrefix(config.prefix) //set a prefix; ! is default
+  .setFeatures("features"); //more about it below!
 /*
 optional: pass in your commands and events directory so that the handler will know where to which folders to go to
 it is defaulted to "commands" and "events
 */
 
-bot.login(bot.config.token);
+bot.login(config.token);
 ```
 
 Inside config.json
@@ -39,6 +39,8 @@ Inside config.json
 ```
 
 # Making Events
+
+By default, there is a ready and message event. The message event is quite limitting, but I hopefully going to add a bunch more features into the message handler.
 
 Example of a ready event
 
@@ -55,8 +57,9 @@ Example of a message event
 //inside your events directory
 
 const HKutil = require("hkutilities");
+const config = require("../config.json");
 module.exports = (bot, message) => {
-  const { prefix } = bot.config;
+  const { prefix } = config;
   /*
   let's use the cannon filter to check if message is from a bot or the message is in dm's
   filter takes 1 paramter; message
@@ -84,6 +87,8 @@ module.exports = (bot, message) => {
 
 # Making Commands
 
+There are currently two default commands, ping, and help. But this is an example on how you'd make a command.
+
 This is a simple ping command. Using `ping`, `pong`, and `p` will all run this command.
 
 ```js
@@ -104,9 +109,9 @@ module.exports = {
 
 # Features
 
-Features are a cool feature that Worn Off Keys made. They are side functions, that run along side your bot. Instead of putting them in the main event files. 
+Features are a cool feature that Worn Off Keys made. They are side functions, that run along side your bot. Instead of putting them in the main event files.
 
-Example for a suggestions channel: 
+Example for a suggestions channel:
 
 ```js
 const HKutil = require("hkutilities");
@@ -129,6 +134,7 @@ module.exports = (bot) => {
 With all that done, your treefile should look somthing similar to this.
 
 ```
+
 HKBot/
 ┣ commands/
 ┃ ┗ ping.js
@@ -140,4 +146,7 @@ HKBot/
 ┣ config.json
 ┣ index.js
 ┗ package.json
+
+```
+
 ```
