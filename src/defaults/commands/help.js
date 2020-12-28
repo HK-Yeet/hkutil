@@ -23,7 +23,11 @@ module.exports = {
         (category, name) => `**${name}:**\n${category.map((command) => `\`${command.name}\``)}`
       );
       let content = lines.join("\n");
-      let helpEmbed = new Discord.MessageEmbed().setColor("BLUE").setTitle("Commands!").setDescription(content);
+      let helpEmbed = new Discord.MessageEmbed()
+        .setColor("BLUE")
+        .setAuthor("Commands!", bot.user.displayAvatarURL())
+        .setDescription(content)
+        .setFooter(`Type ${bot.prefix}help <command> to get more help on a specific command`)
 
       message.channel.send(helpEmbed);
     } else {

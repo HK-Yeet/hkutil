@@ -1,11 +1,11 @@
 const { Collection } = require("discord.js");
-const { commandHandler, eventHandler, featureHandler } = require("hkutilities/src/functions/handlers");
+const { loadStuff, featureHandler } = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
 class HKandler {
   _bot;
   _commandsDir = "commands";
   _eventsDir = "events";
-  _prefix = "!"
+  _prefix = "!";
   constructor(bot, commandsDir, eventsDir) {
     this._bot = bot;
     if (!bot) {
@@ -29,8 +29,7 @@ class HKandler {
     if (module && require.main) {
       const { path } = require.main;
       if (path) {
-        commandHandler(bot, join(path, commandsDir || this._commandsDir));
-        eventHandler(bot, join(path, eventsDir || this._eventsDir));
+        loadStuff(bot, join(path, commandsDir || this._commandsDir), join(path, eventsDir || this._eventsDir));
       }
     }
   }
@@ -41,13 +40,13 @@ class HKandler {
   getFeaturesDir() {
     return this._featuresDir;
   }
-  setPrefix(prefix){
-    this._prefix = prefix
-    this._bot.prefix = this._prefix
-    return this
+  setPrefix(prefix) {
+    this._prefix = prefix;
+    this._bot.prefix = this._prefix;
+    return this;
   }
-  getPrefix(){
-    return this._prefix
+  getPrefix() {
+    return this._prefix;
   }
   loadFeatures(dir) {
     const { path } = require.main;
