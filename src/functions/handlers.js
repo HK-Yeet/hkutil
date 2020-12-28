@@ -1,6 +1,7 @@
 const {
   lstatSync,
   readdirSync,
+  existsSync
 } = require("fs");
 const {
   join
@@ -9,6 +10,7 @@ const checkProperties = require("hkutilities/src/functions/checkProperties");
 let loadedEvents = [];
 
 function eventHandler(bot, dir) {
+  if(!existsSync(dir))return
   const files = readdirSync(dir);
   for (const file of files) {
       const stat = lstatSync(join(dir, file));
@@ -27,6 +29,7 @@ function eventHandler(bot, dir) {
 }
 
 function commandHandler(bot, dir) {
+  if(!existsSync(dir))return
   const files = readdirSync(dir);
   for (const file of files) {
       const stat = lstatSync(join(dir, file));
@@ -46,6 +49,7 @@ function commandHandler(bot, dir) {
 }
 
 function featureHandler(bot, dir) {
+  if(!existsSync(dir))return
   const files = readdirSync(dir);
   for (const file of files) {
       const stat = lstatSync(join(dir, file));
@@ -69,7 +73,6 @@ function loadStuff(bot, commands, events){
 }
 
 function loadDefaults(bot) {
-  if (!setCmd || !setEvt) return
   loadDefaultEvents(bot)
   loadDefaultCommands(bot)
 }
