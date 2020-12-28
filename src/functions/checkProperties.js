@@ -11,15 +11,12 @@ function checkProperties(commandName, command) {
     );
   }
   //categories
-  if (!command.hasOwnProperty("category")) {
-    console.warn(
-      `HKUtilities ❯ ${commandName} ❯ Does not have property "category" ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
-    );
-  }
-  if (typeof command.category != "string") {
-    throw new Error(
-      `HKUtilities ❯ ${commandName} ❯ Category provided isn't a string ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
-    );
+  if (command.hasOwnProperty("category")) {
+    if (typeof command.category != "string") {
+      throw new Error(
+        `HKUtilities ❯ ${commandName} ❯ Category provided isn't a string ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+      );
+    }
   }
   //check for aliases
   if (command.hasOwnProperty("aliases")) {
