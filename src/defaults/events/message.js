@@ -17,7 +17,7 @@ module.exports = (bot, message) => {
     }
 
     for (const permission of clientPerms) {
-      if (!message.member.hasPermission(permission)) {
+      if (!message.channel.permissionsFor(message.guild.me).has(permission)) {
         hasPermission = false;
         return;
       }
