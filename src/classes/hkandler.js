@@ -1,6 +1,7 @@
 const { Collection } = require("discord.js");
 const { loadStuff, featureHandler } = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
+const { setBotPrefix } = require("../functions/getSet");
 class HKandler {
   _bot;
   _commandsDir = "commands";
@@ -42,7 +43,7 @@ class HKandler {
   }
   setPrefix(prefix) {
     this._prefix = prefix;
-    botPrefix = prefix
+    setBotPrefix(prefix);
     return this;
   }
   getPrefix() {
