@@ -42,7 +42,7 @@ class HKandler {
   }
   setPrefix(prefix) {
     this._prefix = prefix;
-    this._bot.prefix = this._prefix;
+    botPrefix = prefix
     return this;
   }
   getPrefix() {

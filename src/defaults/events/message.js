@@ -1,7 +1,7 @@
 const { errorEmbed } = require("hkutilities/src/functions/utils");
 
 module.exports = (bot, message) => {
-  const prefix = bot.prefix;
+  const prefix = botPrefix;
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();

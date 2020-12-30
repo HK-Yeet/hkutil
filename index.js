@@ -1,3 +1,4 @@
+global.botPrefix = "!"
 const { filter, quickEmbed, successEmbed, errorEmbed } = require("hkutilities/src/functions/utils");
 module.exports = {
   //Handler

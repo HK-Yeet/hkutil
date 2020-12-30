@@ -23,13 +23,14 @@ module.exports = {
         (category, name) => `**${name}:**\n${category.map((command) => `\`${command.name}\``)}`
       );
       let content = lines.join("\n");
-      let helpEmbed = new Discord.MessageEmbed()
-        .setColor("BLUE")
-        .setAuthor("Commands!", bot.user.displayAvatarURL())
-        .setDescription(content)
-        .setFooter(`Type ${bot.prefix}help <command> to get more help on a specific command`)
+      let embed = {
+        color: "BLUE",
+        author: { icon_url: bot.user.displayAvatarURL(), name: "Commands!" },
+        description: content,
+        footer: `Type ${bot.prefix}help <command> to get more help on a specific command`
+      };
 
-      message.channel.send(helpEmbed);
+      message.channel.send({embed: embed});
     } else {
       let commandName = args.join();
       const command =
@@ -42,11 +43,12 @@ module.exports = {
         if (key == "execute" || key == "run" || key == "callback") continue;
         content.push(`**${key}**: ${value}`);
       }
-      let helpEmbed = new Discord.MessageEmbed()
-        .setColor("BLUE")
-        .setTitle(command.name)
-        .setDescription(content.join("\n"));
-      message.channel.send(helpEmbed);
-    }
-  },
+      let embed = {
+        color: "BLUE",
+        author: { icon_url: bot.user.displayAvatarURL(), name: command.name },
+        description: content.sort().join("\n"),
+      };
+      message.channel.send({embed: embed});
+    }  
+  }
 };
