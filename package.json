@@ -1,6 +1,6 @@
 {
   "name": "hkutilities",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "devDependencies": {
     "@types/node": "^14.14.14"
   },
@@ -11,6 +11,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/HK-Yeet/hkutil"
+    "url": "https://github.com/HK-Yeet/hkutilities"
   }
 }
