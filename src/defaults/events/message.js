@@ -1,8 +1,16 @@
 const { errorEmbed } = require("hkutilities/src/functions/utils");
-const { getBotPrefix } = require("../../functions/getSet");
+const { getBotPrefix, getMentionPrefix } = require("../../functions/getSet");
 
 module.exports = (bot, message) => {
-  const prefix = getBotPrefix();
+  let prefix = getBotPrefix();
+
+  const mentionRegexPrefix = RegExp(`^<@!?${bot.user.id}>`);
+  if (getMentionPrefix()) {
+    prefix = message.content.toLowerCase().match(mentionRegexPrefix)
+      ? message.content.match(mentionRegexPrefix)[0]
+      : getBotPrefix();
+  }
+
   if (!message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();

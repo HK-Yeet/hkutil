@@ -1,12 +1,13 @@
 const { Collection } = require("discord.js");
+const { setBotPrefix, setMentionPrefix } = require("hkutilities/src/functions/getSet");
 const { loadStuff, featureHandler } = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
-const { setBotPrefix } = require("../functions/getSet");
 class HKandler {
   _bot;
   _commandsDir = "commands";
   _eventsDir = "events";
   _prefix = "!";
+  _mentionPrefix = false;
   constructor(bot, commandsDir, eventsDir) {
     this._bot = bot;
     if (!bot) {
@@ -54,6 +55,14 @@ class HKandler {
     if (path) {
       featureHandler(this._bot, join(path, dir));
     }
+  }
+  setMentionPrefix(mentionPrefix) {
+    this._mentionPrefix = mentionPrefix;
+    setMentionPrefix(mentionPrefix);
+    return this;
+  }
+  getMentionPrefix() {
+    return this._mentionPrefix;
   }
 }
 module.exports = HKandler;
