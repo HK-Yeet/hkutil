@@ -4,7 +4,7 @@ module.exports = {
   aliases: ["commands"],
   category: "utilities",
   clientPerms: ["EMBED_LINKS", "SEND_MESSAGES"],
-  callback: (bot, message, args) => {
+  callback: async (bot, message, args) => {
     if (!args.length) {
       const categories = new Discord.Collection();
 
@@ -20,18 +20,53 @@ module.exports = {
           );
         }
       });
-      const lines = categories.map(
-        (category, name) => `**${name}:**\n${category.map((command) => `\`${command.name}\``)}`
-      );
-      let content = lines.join("\n");
-      let embed = {
-        color: "BLUE",
-        author: { icon_url: bot.user.displayAvatarURL(), name: "Commands!" },
-        description: content,
-        footer: `Type ${bot.prefix}help <command> to get more help on a specific command`,
-      };
+      let pageTitle = Array.from(categories.map((category, name) => name));
+      let pages = Array.from(categories.map((category, name) => category.map((command) => `\`${command.name}\``)));
+      let page = 1;
 
-      message.channel.send({ embed: embed });
+      const embed = new Discord.MessageEmbed() // Define a new embed
+      .setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL())
+      .setColor(0xffffff) // Set the color
+        .setFooter(`Page ${page} of ${pages.length}`)
+        .setDescription(pages[page - 1].join(", "));
+
+      let msg = await message.channel.send(embed);
+      msg.react("⬅");
+      msg.react("➡");
+      msg.react("❌");
+
+      reactionCollector = msg.createReactionCollector((reaction, user) => user.id == message.author.id, {
+        time: 180000,
+      });
+
+      reactionCollector.on("collect", (reaction, user) => {
+        let direction = reaction.emoji.name;
+        reaction.users.remove(user).catch((err) => {});
+        switch (direction) {
+          case "⬅":
+            if (page > 1) {
+              page--;
+              embed.setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL());
+              embed.setDescription(pages[page - 1].join(", "));
+              embed.setFooter(`Page ${page} of ${pages.length}`);
+              msg.edit(embed);
+            }
+            break;
+          case "➡":
+            if (page < pages.length) {
+              page++;
+              embed.setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL());
+              embed.setDescription(pages[page - 1].join(", "));
+              embed.setFooter(`Page ${page} of ${pages.length}`);
+              msg.edit(embed);
+            }
+            break;
+          case "❌":
+            reactionCollector.stop();
+            msg.delete;
+            break;
+        }
+      });
     } else {
       let commandName = args.join();
       const command =
