@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const { getBotPrefix } = require("hkutilities/src/functions/getSet");
 module.exports = {
   name: "help",
   aliases: ["commands"],
@@ -22,18 +23,19 @@ module.exports = {
       });
       let pageTitle = Array.from(categories.map((category, name) => name));
       let pages = Array.from(categories.map((category, name) => category.map((command) => `\`${command.name}\``)));
-      let page = 1;
+      let page = 0;
 
-      const embed = new Discord.MessageEmbed() // Define a new embed
-      .setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL())
-      .setColor(0xffffff) // Set the color
-        .setFooter(`Page ${page} of ${pages.length}`)
-        .setDescription(pages[page - 1].join(", "));
+      const embed = new Discord.MessageEmbed()
+        .setAuthor("Commands!")
+        .setColor("BLUE")
+        .setDescription(
+          `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${getBotPrefix()}help <command>`
+        );
 
       let msg = await message.channel.send(embed);
       msg.react("⬅");
+      msg.react("⏹");
       msg.react("➡");
-      msg.react("❌");
 
       reactionCollector = msg.createReactionCollector((reaction, user) => user.id == message.author.id, {
         time: 180000,
@@ -46,24 +48,33 @@ module.exports = {
           case "⬅":
             if (page > 1) {
               page--;
-              embed.setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL());
-              embed.setDescription(pages[page - 1].join(", "));
+              embed.setAuthor(
+                pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1),
+                bot.user.displayAvatarURL()
+              );
+              embed.setDescription(pages[page - 1].sort().join(", "));
               embed.setFooter(`Page ${page} of ${pages.length}`);
+              embed.setColor("BLUE");
               msg.edit(embed);
             }
             break;
           case "➡":
             if (page < pages.length) {
               page++;
-              embed.setAuthor(pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1), bot.user.displayAvatarURL());
-              embed.setDescription(pages[page - 1].join(", "));
+              embed.setAuthor(
+                pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1),
+                bot.user.displayAvatarURL()
+              );
+              embed.setDescription(pages[page - 1].sort().join(", "));
               embed.setFooter(`Page ${page} of ${pages.length}`);
+              embed.setColor("BLUE");
               msg.edit(embed);
             }
             break;
-          case "❌":
+          case "⏹":
             reactionCollector.stop();
             msg.delete();
+            message.delete().catch((o_O) => {});
             break;
         }
       });
