@@ -63,7 +63,7 @@ module.exports = {
             break;
           case "❌":
             reactionCollector.stop();
-            msg.delete;
+            msg.delete();
             break;
         }
       });
