@@ -4,7 +4,7 @@ module.exports = {
   name: "help",
   aliases: ["commands"],
   category: "utilities",
-  clientPerms: ["EMBED_LINKS", "SEND_MESSAGES"],
+  clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
   callback: async (bot, message, args) => {
     if (!args.length) {
       const categories = new Discord.Collection();
