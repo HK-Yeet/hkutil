@@ -10,7 +10,7 @@ module.exports = {
       const categories = new Discord.Collection();
 
       bot.commands.forEach((command) => {
-        if (command.hidden) return;
+        if (command.hidden && !message.member.hasPermission("ADMINISTRATOR")) return;
         const category = categories.get(`${command.category ? command.category : "misc"}`);
         if (category) {
           category.set(command.name, command);
@@ -27,15 +27,15 @@ module.exports = {
 
       const embed = new Discord.MessageEmbed()
         .setAuthor("Commands!")
-        .setColor("BLUE")
+        .setColor(message.guild.me.displayHexColor)
         .setDescription(
           `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${getBotPrefix()}help <command>`
         );
 
       let msg = await message.channel.send(embed);
-      msg.react("⬅");
+      msg.react("◀️");
       msg.react("⏹");
-      msg.react("➡");
+      msg.react("▶️");
 
       reactionCollector = msg.createReactionCollector((reaction, user) => user.id == message.author.id, {
         time: 180000,
@@ -45,7 +45,7 @@ module.exports = {
         let direction = reaction.emoji.name;
         reaction.users.remove(user).catch((err) => {});
         switch (direction) {
-          case "⬅":
+          case "◀️":
             if (page > 1) {
               page--;
               embed.setAuthor(
@@ -54,11 +54,11 @@ module.exports = {
               );
               embed.setDescription(pages[page - 1].sort().join(", "));
               embed.setFooter(`Page ${page} of ${pages.length}`);
-              embed.setColor("BLUE");
+              embed.setColor(message.guild.me.displayHexColor);
               msg.edit(embed);
             }
             break;
-          case "➡":
+          case "▶️":
             if (page < pages.length) {
               page++;
               embed.setAuthor(
@@ -67,7 +67,7 @@ module.exports = {
               );
               embed.setDescription(pages[page - 1].sort().join(", "));
               embed.setFooter(`Page ${page} of ${pages.length}`);
-              embed.setColor("BLUE");
+              embed.setColor(message.guild.me.displayHexColor);
               msg.edit(embed);
             }
             break;
@@ -92,7 +92,7 @@ module.exports = {
         content.push(`**${key}**: ${value}`);
       }
       let embed = {
-        color: "BLUE",
+        color: message.guild.me.displayHexColor,
         author: { icon_url: bot.user.displayAvatarURL(), name: command.name },
         description: `${content.sort().join("\n") ? content.sort().join("\n") : "No Details Given"}`,
       };
