@@ -56,7 +56,7 @@ module.exports = (bot, message) => {
   
   if(command.minArgs){
     if(args.length < command.minArgs){
-       return errorEmbed(message.channel, `Improper Syntax\nUse \`${command.usage ? `${prefix}${command.name} ${command.usage}` : `${prefix}help ${command.name}`}`);
+       return errorEmbed(message.channel, `Improper Syntax\nUse \`${command.usage ? `${prefix}${command.name} ${command.usage}` : `${prefix}help ${command.name}`}\``);
     }
   }
 
