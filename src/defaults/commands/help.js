@@ -4,19 +4,20 @@ module.exports = {
   name: "help",
   aliases: ["commands"],
   category: "utilities",
+  hidden: true,
   clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
   callback: async (bot, message, args) => {
     if (!args.length) {
       const categories = new Discord.Collection();
 
       bot.commands.forEach((command) => {
-        if (command.hidden && !message.member.hasPermission("ADMINISTRATOR")) return;
-        const category = categories.get(`${command.category ? command.category : "misc"}`);
+        if (command.hidden && (!message.member.hasPermission("ADMINISTRATOR"))) return;
+        const category = categories.get(`${command.category ? command.category.toLowerCase() : "misc"}`);
         if (category) {
           category.set(command.name, command);
         } else {
           categories.set(
-            `${command.category ? command.category : "misc"}`,
+            `${command.category ? command.category.toLowerCase() : "misc"}`,
             new Discord.Collection().set(command.name, command)
           );
         }
