@@ -115,7 +115,7 @@ module.exports = (bot, message) => {
     }
   } else if (command.callback) {
     try {
-      command.execute(bot, message, args);
+      command.callback(bot, message, args);
     } catch (error) {
       errorEmbed(message.channel, error);
     }
