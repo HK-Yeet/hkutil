@@ -1,6 +1,10 @@
 const { lstatSync, readdirSync, existsSync } = require("fs");
 const { join } = require("path");
-const {checkProperties, checkPermissions} = require("hkutilities/src/functions/checkProperties");
+const {
+  checkProperties,
+  checkPermissions,
+  checkEvents,
+} = require("hkutilities/src/functions/validate");
 let loadedEvents = [];
 
 function eventHandler(bot, dir) {
@@ -15,9 +19,11 @@ function eventHandler(bot, dir) {
       if (file.endsWith(".js")) {
         const event = require(join(dir, file));
         const eventName = file.split(".")[0];
-        bot.on(eventName, event.bind(null, bot));
-        console.log(`HKUtilities ❯ Loading event ❯ ${eventName}`);
-        loadedEvents.push(eventName);
+        if (checkEvents(eventName)) {
+          bot.on(eventName, event.bind(null, bot));
+          console.log(`HKUtilities ❯ Loading event ❯ ${eventName}`);
+          loadedEvents.push(eventName);
+        }
       }
     }
   }
@@ -36,8 +42,8 @@ function commandHandler(bot, dir) {
         const command = require(join(dir, file));
         const commandName = command.name;
         if (checkProperties(file, command)) {
-          if(command.userPerms)checkPermissions(file, command.userPerms)
-          if(command.clientPerms)checkPermissions(file, command.clientPerms)
+          if (command.userPerms) checkPermissions(file, command.userPerms);
+          if (command.clientPerms) checkPermissions(file, command.clientPerms);
 
           bot.commands.set(command.name, command);
           console.log(`HKUtilities ❯ Loading command ❯ ${commandName}`);
@@ -48,6 +54,7 @@ function commandHandler(bot, dir) {
 }
 
 function featureHandler(bot, dir) {
+  if (!dir) return;
   if (!existsSync(dir))
     return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
@@ -66,26 +73,34 @@ function featureHandler(bot, dir) {
   }
 }
 
-function loadStuff(bot, commands, events) {
+function loadStuff(bot, commands, events, hkandler) {
   commandHandler(bot, commands);
   eventHandler(bot, events);
-  loadDefaults(bot);
+  featureHandler(bot, hkandler.featuresDir);
+  loadDefaults(bot, hkandler);
 }
 
-function loadDefaults(bot) {
-  loadDefaultEvents(bot);
+function loadDefaults(bot, hkandler) {
+  loadDefaultEvents(bot, hkandler);
   loadDefaultCommands(bot);
 }
 
-function loadDefaultEvents(bot) {
-  const dir = join(__dirname, "..", "defaults", "events");
-  const files = readdirSync(dir);
-  for (const file of files) {
-    const event = require(join(dir, file));
-    const eventName = file.split(".")[0];
-    if (loadedEvents.includes(eventName)) return;
-    console.log(`HKUtilities ❯ Loading default event ❯ ${eventName}`);
-    bot.on(eventName, event.bind(null, bot));
+function loadDefaultEvents(bot, hkandler) {
+  if (!loadedEvents.includes("message")) {
+    const message = require(join(
+      __dirname,
+      "..",
+      "defaults",
+      "events",
+      "message"
+    ));
+    console.log("HKUtilities ❯ Loading default event ❯ message");
+    message(bot, hkandler);
+  }
+  if (!loadedEvents.includes("ready")) {
+    const ready = require(join(__dirname, "..", "defaults", "events", "ready"));
+    console.log("HKUtilities ❯ Loading default event ❯ readt");
+    ready(bot, hkandler);
   }
 }
 

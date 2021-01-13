@@ -1,11 +1,18 @@
 const { Collection } = require("discord.js");
-const { setBotPrefix, setMentionPrefix } = require("hkutilities/src/functions/getSet");
-const { loadStuff, featureHandler } = require("hkutilities/src/functions/handlers");
+const {
+  setBotPrefix,
+  setMentionPrefix,
+} = require("hkutilities/src/functions/getSet");
+const {
+  loadStuff,
+  featureHandler,
+} = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
 class HKandler {
   _bot;
   _commandsDir = "commands";
   _eventsDir = "events";
+  _featuresDir = null;
   _prefix = "!";
   _mentionPrefix = false;
   constructor(bot, commandsDir, eventsDir) {
@@ -23,7 +30,9 @@ class HKandler {
       bot.commands = new Collection();
     }
     if (!commandsDir) {
-      console.warn('HKUtilities ❯ No commands folder prvided, using "commands"');
+      console.warn(
+        'HKUtilities ❯ No commands folder prvided, using "commands"'
+      );
     }
     if (!eventsDir) {
       console.warn('HKUtilities ❯ No events folder provided, using "events"');
@@ -31,37 +40,34 @@ class HKandler {
     if (module && require.main) {
       const { path } = require.main;
       if (path) {
-        loadStuff(bot, join(path, commandsDir || this._commandsDir), join(path, eventsDir || this._eventsDir));
+        loadStuff(
+          bot,
+          join(path, commandsDir || this._commandsDir),
+          join(path, eventsDir || this._eventsDir),
+          this
+        );
       }
     }
   }
   setFeaturesDir(featuresDir) {
-    this.loadFeatures(featuresDir);
+    this._featuresDir = featuresDir;
     return this;
   }
-  getFeaturesDir() {
+  get featuresDir() {
     return this._featuresDir;
   }
   setPrefix(prefix) {
     this._prefix = prefix;
-    setBotPrefix(prefix);
     return this;
   }
-  getPrefix() {
+  get prefix() {
     return this._prefix;
-  }
-  loadFeatures(dir) {
-    const { path } = require.main;
-    if (path) {
-      featureHandler(this._bot, join(path, dir));
-    }
   }
   setMentionPrefix(mentionPrefix) {
     this._mentionPrefix = mentionPrefix;
-    setMentionPrefix(mentionPrefix);
     return this;
   }
-  getMentionPrefix() {
+  get mentionPrefix() {
     return this._mentionPrefix;
   }
 }

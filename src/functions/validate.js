@@ -26,6 +26,30 @@ function checkProperties(commandName, command) {
       );
     }
   }
+  //cooldown
+  if (command.hasOwnProperty("cooldown")) {
+    if (isNaN(command.cooldown)) {
+      throw new Error(
+        `HKUtilities ❯ ${commandName} ❯ Cooldown is an integer ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+      );
+    }
+  }
+  //usage
+  if (command.hasOwnProperty("usage")) {
+    if (typeof command.usage != "string") {
+      throw new Error(
+        `HKUtilities ❯ ${commandName} ❯ Command usage should be a string ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+      );
+    }
+  }
+  //hidden
+  if(command.hasOwnProperty("hidden")){
+    if(typeof command.hidden != "boolean"){
+      throw new Error(
+        `HKUtilities ❯ ${commandName} ❯ Hidden should be a boolean ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
+      );
+    }
+  }
   //check for function
   if (
     typeof command.run != "function" &&
@@ -84,4 +108,61 @@ function checkPermissions(commandName, permissions) {
   }
 }
 
-module.exports = { checkProperties, checkPermissions };
+function checkEvent(eventName) {
+  const validEvents = [
+    "channelCreate",
+    "channelDelete",
+    "channelPinsUpdate",
+    "channelUpdate",
+    "debug",
+    "emojiCreate",
+    "emojiDelete",
+    "emojiUpdate",
+    "error",
+    "guildBanAdd",
+    "guildBanRemove",
+    "guildCreate",
+    "guildDelete",
+    "guildIntegrationsUpdate",
+    "guildMemberAdd",
+    "guildMemberAvailable",
+    "guildMemberRemove",
+    "guildMembersChunk",
+    "guildMemberSpeaking",
+    "guildMemberUpdate",
+    "guildUnavailable",
+    "guildUpdate",
+    "invalidated",
+    "inviteCreate",
+    "inviteDelete",
+    "message",
+    "messageDelete",
+    "messageDeleteBulk",
+    "messageReactionAdd",
+    "messageReactionRemove",
+    "messageReactionRemoveAll",
+    "messageReactionRemoveEmoji",
+    "messageUpdate",
+    "presenceUpdate",
+    "rateLimit",
+    "ready",
+    "roleCreate",
+    "roleDelete",
+    "roleUpdate",
+    "shardDisconnect",
+    "shardError",
+    "shardReady",
+    "shardReconnecting",
+    "shardResume",
+    "typingStart",
+    "userUpdate",
+    "voiceStateUpdate",
+    "warn",
+    "webhookUpdate",
+  ];
+  if (!validEvents.includes(eventName))
+    throw new Error(`
+  HKUtilities ❯ ${commandName} ❯ Unknown Event "${eventName}" ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`);
+}
+
+module.exports = { checkProperties, checkPermissions, checkEvent };
