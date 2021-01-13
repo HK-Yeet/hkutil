@@ -53,7 +53,11 @@ module.exports = (bot, message) => {
         hasPermission = false;
         return errorEmbed(
           message.channel,
-          "You do not have permission to use this command!"
+          `You do not have permission to use this command! You need ${command.userPerms.join(', ')
+            .toLowerCase()
+            .split(/_| /g)
+            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(" ")}!`
         );
       }
       if (hasPermission) {
@@ -81,7 +85,7 @@ module.exports = (bot, message) => {
 
   const now = Date.now();
   const timestamps = cooldowns.get(command.name);
-  const cooldownAmount = (command.config.cooldown || 3) * 1000;
+  const cooldownAmount = (command.cooldown || 3) * 1000;
 
   //checks if user has cooldown
   if (timestamps.has(message.author.id)) {
