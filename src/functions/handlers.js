@@ -1,10 +1,11 @@
 const { lstatSync, readdirSync, existsSync } = require("fs");
 const { join } = require("path");
-const checkProperties = require("hkutilities/src/functions/checkProperties");
+const {checkProperties, checkPermissions} = require("hkutilities/src/functions/checkProperties");
 let loadedEvents = [];
 
 function eventHandler(bot, dir) {
-  if (!existsSync(dir)) return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
+  if (!existsSync(dir))
+    return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
   for (const file of files) {
     const stat = lstatSync(join(dir, file));
@@ -23,7 +24,8 @@ function eventHandler(bot, dir) {
 }
 
 function commandHandler(bot, dir) {
-  if (!existsSync(dir)) return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
+  if (!existsSync(dir))
+    return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
   for (const file of files) {
     const stat = lstatSync(join(dir, file));
@@ -33,7 +35,10 @@ function commandHandler(bot, dir) {
       if (file.endsWith(".js")) {
         const command = require(join(dir, file));
         const commandName = command.name;
-        if (checkProperties(commandName, command)) {
+        if (checkProperties(file, command)) {
+          if(command.userPerms)checkPermissions(file, command.userPerms)
+          if(command.clientPerms)checkPermissions(file, command.clientPerms)
+
           bot.commands.set(command.name, command);
           console.log(`HKUtilities ❯ Loading command ❯ ${commandName}`);
         }
@@ -43,7 +48,8 @@ function commandHandler(bot, dir) {
 }
 
 function featureHandler(bot, dir) {
-  if (!existsSync(dir)) return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
+  if (!existsSync(dir))
+    return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
   for (const file of files) {
     const stat = lstatSync(join(dir, file));
@@ -89,7 +95,12 @@ function loadDefaultCommands(bot) {
   for (const file of files) {
     const command = require(join(dir, file));
     const commandName = command.name;
-    if (bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName)))
+    if (
+      bot.commands.get(commandName) ||
+      bot.commands.find(
+        (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+      )
+    )
       return;
     console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);
     bot.commands.set(command.name, command);

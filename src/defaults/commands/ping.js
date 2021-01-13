@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 module.exports = {
   name: "ping",
-  aliases: ["pong", "p"], // Optional
+  category: "utilities",
+  hidden: true,
+  aliases: ["pong"], // Optional
   callback: (bot, message, args) =>{
     message.channel.send(`Pinging...`).then((msg) => {
       const pingEmbed = new Discord.MessageEmbed()

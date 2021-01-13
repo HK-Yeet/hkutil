@@ -1,6 +1,8 @@
 const { errorEmbed } = require("hkutilities/src/functions/utils");
 const { getBotPrefix, getMentionPrefix } = require("../../functions/getSet");
-
+const { Collection } = require("discord.js");
+const humanize = require("humanize-duration");
+const cooldowns = new Collection();
 module.exports = (bot, message) => {
   let prefix = getBotPrefix();
 
@@ -15,14 +17,17 @@ module.exports = (bot, message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command =
-    bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+    bot.commands.get(commandName) ||
+    bot.commands.find(
+      (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+    );
   if (!command) return;
 
   if (command.clientPerms) {
     let { clientPerms } = command;
     let hasPermission = true;
-    if (typeof permissions === "string") {
-      permissions = [permissions];
+    if (typeof clientPerms === "string") {
+      clientPerms = [clientPerms];
     }
 
     for (const permission of clientPerms) {
@@ -39,38 +44,82 @@ module.exports = (bot, message) => {
   if (command.userPerms) {
     let { userPerms } = command;
     let hasPermission = true;
-    if (typeof permissions === "string") {
-      permissions = [permissions];
+    if (typeof userPerms === "string") {
+      userPerms = [userPerms];
     }
 
     for (const permission of userPerms) {
       if (!message.member.hasPermission(permission)) {
         hasPermission = false;
-        return errorEmbed(message.channel, "You do not have permission to use this command!");
+        return errorEmbed(
+          message.channel,
+          "You do not have permission to use this command!"
+        );
       }
       if (hasPermission) {
         continue;
       }
     }
   }
-  
-  if(command.minArgs){
-    if(args.length < command.minArgs){
-       return errorEmbed(message.channel, `Improper Syntax\nUse \`${command.usage ? `${prefix}${command.name} ${command.usage}` : `${prefix}help ${command.name}`}\``);
+
+  if (command.minArgs) {
+    if (args.length < command.minArgs) {
+      return errorEmbed(
+        message.channel,
+        `Improper Syntax\nUse \`${
+          command.usage
+            ? `${prefix}${command.name} ${command.usage}`
+            : `${prefix}help ${command.name}`
+        }\``
+      );
     }
   }
 
-  try {
-    command.execute(bot, message, args);
-  } catch (error) {
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Collection());
+  }
+
+  const now = Date.now();
+  const timestamps = cooldowns.get(command.name);
+  const cooldownAmount = (command.config.cooldown || 3) * 1000;
+
+  //checks if user has cooldown
+  if (timestamps.has(message.author.id)) {
+    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+    if (now < expirationTime) {
+      const remaining = humanize(expirationTime - now, {
+        delimiter: " and ",
+        maxDecimalPoints: 1,
+      });
+
+      return errorEmbed(
+        message.channel,
+        `Slow down there buddy! Please wait \`${remaining}\` before using ${command.name}`
+      );
+    }
+  }
+
+  timestamps.set(message.author.id, now);
+  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+  if (command.execute) {
     try {
-      command.callback(bot, message, args);
+      command.execute(bot, message, args);
     } catch (error) {
-      try {
-        command.run(bot, message, args);
-      } catch (error) {
-        errorEmbed(message.channel, error);
-      }
+      errorEmbed(message.channel, error);
+    }
+  } else if (command.callback) {
+    try {
+      command.execute(bot, message, args);
+    } catch (error) {
+      errorEmbed(message.channel, error);
+    }
+  } else if (command.run) {
+    try {
+      command.run(bot, message, args);
+    } catch (error) {
+      errorEmbed(message.channel, error);
     }
   }
 };

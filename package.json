@@ -1,12 +1,13 @@
 {
   "name": "hkutilities",
-  "version": "2.5.4",
+  "version": "2.6.0",
   "devDependencies": {
     "@types/node": "^14.14.14"
   },
   "dependencies": {
     "discord.js": "^12.5.1",
     "fs": "0.0.1-security",
+    "humanize-duration": "^3.25.1",
     "path": "^0.12.7"
   },
   "repository": {
