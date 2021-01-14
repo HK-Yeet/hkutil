@@ -9,8 +9,8 @@ let loadedEvents = [];
 
 function loadStuff(bot, commands, events, hkandler) {
   commandHandler(bot, commands);
-  eventHandler(bot, events);
-  featureHandler(bot, join(require.main.path, hkandler.featuresDir));
+  eventHandler(bot, events, hkandler);
+  if (hkandler.featureDir) featureHandler(bot, hkandler.featuresDir);
   loadDefaults(bot, hkandler);
 }
 
@@ -19,7 +19,7 @@ function loadDefaults(bot, hkandler) {
   loadDefaultCommands(bot);
 }
 
-function eventHandler(bot, dir) {
+function eventHandler(bot, dir, hkandler) {
   if (!existsSync(dir))
     return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
