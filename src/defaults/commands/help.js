@@ -1,12 +1,11 @@
 const Discord = require("discord.js");
-const { getBotPrefix } = require("hkutilities/src/functions/getSet");
 module.exports = {
   name: "help",
   aliases: ["commands"],
   category: "utilities",
   hidden: true,
   clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
-  callback: async (bot, message, args) => {
+  callback: async (bot, message, args, hkandler) => {
     if (!args.length) {
       const categories = new Discord.Collection();
 
@@ -30,7 +29,7 @@ module.exports = {
         .setAuthor("Commands!")
         .setColor(message.guild.me.displayHexColor)
         .setDescription(
-          `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${getBotPrefix()}help <command>`
+          `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${hkandler.prefix}help <command>`
         );
 
       let msg = await message.channel.send(embed);

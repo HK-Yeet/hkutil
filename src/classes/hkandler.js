@@ -1,9 +1,5 @@
 const { Collection } = require("discord.js");
 const {
-  setBotPrefix,
-  setMentionPrefix,
-} = require("hkutilities/src/functions/getSet");
-const {
   loadStuff,
   featureHandler,
 } = require("hkutilities/src/functions/handlers");

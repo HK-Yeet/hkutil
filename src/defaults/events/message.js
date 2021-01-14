@@ -1,5 +1,4 @@
 const { errorEmbed } = require("hkutilities/src/functions/utils");
-const { getBotPrefix} = require("../../functions/getSet");
 const { Collection } = require("discord.js");
 const humanize = require("humanize-duration");
 const cooldowns = new Collection();
@@ -123,7 +122,7 @@ module.exports = (bot, hkandler) => {
       }
     } else if (command.run) {
       try {
-        command.run(bot, message, args);
+        command.run(bot, message, args, hkandler);
       } catch (error) {
         errorEmbed(message.channel, error);
       }
