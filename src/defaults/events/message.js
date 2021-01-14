@@ -10,7 +10,7 @@ module.exports = (bot, hkandler) => {
     if (hkandler.mentionPrefix) {
       prefix = message.content.toLowerCase().match(mentionRegexPrefix)
         ? message.content.match(mentionRegexPrefix)[0]
-        : getBotPrefix();
+        : hkandler.prefix;
     }
 
     if (!message.content.startsWith(prefix)) return;
@@ -86,7 +86,8 @@ module.exports = (bot, hkandler) => {
 
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 3) * 1000;
+    const cooldownAmount =
+      (command.cooldown || hkandler.defaultCooldown) * 1000;
 
     //checks if user has cooldown
     if (timestamps.has(message.author.id)) {

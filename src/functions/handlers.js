@@ -7,6 +7,18 @@ const {
 } = require("hkutilities/src/functions/validate");
 let loadedEvents = [];
 
+function loadStuff(bot, commands, events, hkandler) {
+  commandHandler(bot, commands);
+  eventHandler(bot, events);
+  featureHandler(bot, join(require.main.path, hkandler.featuresDir));
+  loadDefaults(bot, hkandler);
+}
+
+function loadDefaults(bot, hkandler) {
+  loadDefaultEvents(bot, hkandler);
+  loadDefaultCommands(bot);
+}
+
 function eventHandler(bot, dir) {
   if (!existsSync(dir))
     return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
@@ -54,7 +66,6 @@ function commandHandler(bot, dir) {
 }
 
 function featureHandler(bot, dir) {
-  if (!dir) return;
   if (!existsSync(dir))
     return console.warn(`HKUtilities ❯ ${dir} is not a directory`);
   const files = readdirSync(dir);
@@ -71,18 +82,6 @@ function featureHandler(bot, dir) {
       }
     }
   }
-}
-
-function loadStuff(bot, commands, events, hkandler) {
-  commandHandler(bot, commands);
-  eventHandler(bot, events);
-  featureHandler(bot, hkandler.featuresDir);
-  loadDefaults(bot, hkandler);
-}
-
-function loadDefaults(bot, hkandler) {
-  loadDefaultEvents(bot, hkandler);
-  loadDefaultCommands(bot);
 }
 
 function loadDefaultEvents(bot, hkandler) {
@@ -124,5 +123,4 @@ function loadDefaultCommands(bot) {
 
 module.exports = {
   loadStuff,
-  featureHandler,
 };

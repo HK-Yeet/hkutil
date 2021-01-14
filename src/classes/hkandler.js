@@ -1,8 +1,5 @@
 const { Collection } = require("discord.js");
-const {
-  loadStuff,
-  featureHandler,
-} = require("hkutilities/src/functions/handlers");
+const { loadStuff } = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
 class HKandler {
   _bot;
@@ -11,6 +8,7 @@ class HKandler {
   _featuresDir = null;
   _prefix = "!";
   _mentionPrefix = false;
+  _defaultCooldown = 3;
   constructor(bot, commandsDir, eventsDir) {
     this._bot = bot;
     if (!bot) {
@@ -65,6 +63,13 @@ class HKandler {
   }
   get mentionPrefix() {
     return this._mentionPrefix;
+  }
+  setDefaultCooldown(cooldown) {
+    this._defaultCooldown = cooldown;
+    return this;
+  }
+  get defaultCooldown() {
+    return this._defaultCooldown;
   }
 }
 module.exports = HKandler;
