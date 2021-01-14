@@ -1,6 +1,6 @@
-const { errorEmbed } = require("hkutilities/src/functions/utils");
-const { Collection } = require("discord.js");
 const humanize = require("humanize-duration");
+const { Collection } = require("discord.js");
+const { errorEmbed } = require("hkutilities/src/functions/utils");
 const cooldowns = new Collection();
 module.exports = (bot, hkandler) => {
   bot.on("message", (message) => {
@@ -110,13 +110,13 @@ module.exports = (bot, hkandler) => {
 
     if (command.execute) {
       try {
-        command.execute(bot, message, args);
+        command.execute(bot, message, args, hkandler);
       } catch (error) {
         errorEmbed(message.channel, error);
       }
     } else if (command.callback) {
       try {
-        command.callback(bot, message, args);
+        command.callback(bot, message, args, hkandler);
       } catch (error) {
         errorEmbed(message.channel, error);
       }
