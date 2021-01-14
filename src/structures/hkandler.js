@@ -1,6 +1,6 @@
 const { Collection } = require("discord.js");
 const { join } = require("path");
-const { loadStuff } = require("hkutilities/src/functions/handlers");
+const { loadStuff, featureHandler } = require("hkutilities/src/functions/handlers");
 class HKandler {
   _bot;
   _commandsDir = "commands";
@@ -46,6 +46,7 @@ class HKandler {
   }
   setFeaturesDir(featuresDir) {
     this._featuresDir = featuresDir;
+    featureHandler(this._bot, join(require.main.path, featuresDir))
     return this;
   }
   get featuresDir() {

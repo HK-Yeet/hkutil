@@ -117,4 +117,5 @@ function loadDefaultCommands(bot) {
 
 module.exports = {
   loadStuff,
+  featureHandler,
 };
