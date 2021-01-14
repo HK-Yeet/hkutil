@@ -10,8 +10,13 @@ module.exports = {
       const categories = new Discord.Collection();
 
       bot.commands.forEach((command) => {
-        if (command.hidden && (!message.member.hasPermission("ADMINISTRATOR"))) return;
-        const category = categories.get(`${command.category ? command.category.toLowerCase() : "misc"}`);
+        if (command.hidden && !message.member.hasPermission("ADMINISTRATOR"))
+          return;
+        if (command.ownerOnly && !hkandler.owners.includes(message.author.id))
+          return;
+        const category = categories.get(
+          `${command.category ? command.category.toLowerCase() : "misc"}`
+        );
         if (category) {
           category.set(command.name, command);
         } else {
@@ -22,7 +27,11 @@ module.exports = {
         }
       });
       let pageTitle = Array.from(categories.map((category, name) => name));
-      let pages = Array.from(categories.map((category, name) => category.map((command) => `\`${command.name}\``)));
+      let pages = Array.from(
+        categories.map((category, name) =>
+          category.map((command) => `\`${command.name}\``)
+        )
+      );
       let page = 0;
 
       const embed = new Discord.MessageEmbed()
@@ -37,9 +46,12 @@ module.exports = {
       msg.react("⏹");
       msg.react("▶️");
 
-      reactionCollector = msg.createReactionCollector((reaction, user) => user.id == message.author.id, {
-        time: 180000,
-      });
+      reactionCollector = msg.createReactionCollector(
+        (reaction, user) => user.id == message.author.id,
+        {
+          time: 180000,
+        }
+      );
 
       reactionCollector.on("collect", (reaction, user) => {
         let direction = reaction.emoji.name;
@@ -49,7 +61,8 @@ module.exports = {
             if (page > 1) {
               page--;
               embed.setAuthor(
-                pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1),
+                pageTitle[page - 1].charAt(0).toUpperCase() +
+                  pageTitle[page - 1].slice(1),
                 bot.user.displayAvatarURL()
               );
               embed.setDescription(pages[page - 1].sort().join(", "));
@@ -62,7 +75,8 @@ module.exports = {
             if (page < pages.length) {
               page++;
               embed.setAuthor(
-                pageTitle[page - 1].charAt(0).toUpperCase() + pageTitle[page - 1].slice(1),
+                pageTitle[page - 1].charAt(0).toUpperCase() +
+                  pageTitle[page - 1].slice(1),
                 bot.user.displayAvatarURL()
               );
               embed.setDescription(pages[page - 1].sort().join(", "));
@@ -81,7 +95,10 @@ module.exports = {
     } else {
       let commandName = args.join();
       const command =
-        bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+        bot.commands.get(commandName) ||
+        bot.commands.find(
+          (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+        );
       if (!command) return;
       let content = [];
       for (var key in command) {
@@ -94,7 +111,11 @@ module.exports = {
       let embed = {
         color: message.guild.me.displayHexColor,
         author: { icon_url: bot.user.displayAvatarURL(), name: command.name },
-        description: `${content.sort().join("\n") ? content.sort().join("\n") : "No Details Given"}`,
+        description: `${
+          content.sort().join("\n")
+            ? content.sort().join("\n")
+            : "No Details Given"
+        }`,
       };
       message.channel.send({ embed: embed });
     }

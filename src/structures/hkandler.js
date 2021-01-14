@@ -1,6 +1,6 @@
 const { Collection } = require("discord.js");
-const { loadStuff } = require("hkutilities/src/functions/handlers");
 const { join } = require("path");
+const { loadStuff } = require("hkutilities/src/functions/handlers");
 class HKandler {
   _bot;
   _commandsDir = "commands";
@@ -9,6 +9,7 @@ class HKandler {
   _prefix = "!";
   _mentionPrefix = false;
   _defaultCooldown = 3;
+  _owners = [""];
   constructor(bot, commandsDir, eventsDir) {
     this._bot = bot;
     if (!bot) {
@@ -70,6 +71,13 @@ class HKandler {
   }
   get defaultCooldown() {
     return this._defaultCooldown;
+  }
+  setOwners(owners) {
+    this._owners = owners;
+    return this;
+  }
+  get owners() {
+    return this._owners;
   }
 }
 module.exports = HKandler;

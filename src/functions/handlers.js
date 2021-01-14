@@ -32,7 +32,7 @@ function eventHandler(bot, dir) {
         const event = require(join(dir, file));
         const eventName = file.split(".")[0];
         if (checkEvent(eventName)) {
-          bot.on(eventName, event.bind(null, bot));
+          bot.on(eventName, event.bind(null, bot, hkandler));
           console.log(`HKUtilities ❯ Loading event ❯ ${eventName}`);
           loadedEvents.push(eventName);
         }
@@ -85,21 +85,15 @@ function featureHandler(bot, dir) {
 }
 
 function loadDefaultEvents(bot, hkandler) {
-  if (!loadedEvents.includes("message")) {
-    const message = require(join(
-      __dirname,
-      "..",
-      "defaults",
-      "events",
-      "message"
-    ));
-    console.log("HKUtilities ❯ Loading default event ❯ message");
-    message(bot, hkandler);
-  }
-  if (!loadedEvents.includes("ready")) {
-    const ready = require(join(__dirname, "..", "defaults", "events", "ready"));
-    console.log("HKUtilities ❯ Loading default event ❯ readt");
-    ready(bot, hkandler);
+  const dir = join(__dirname, "..", "defaults", "events");
+  const files = readdirSync(dir);
+  for (const file of files) {
+    const event = require(join(dir, file));
+    const eventName = file.split(".")[0];
+    if (!loadedEvents.includes(eventName)) {
+      bot.on(eventName, event.bind(null, bot, hkandler));
+      console.log(`HKUtilities ❯ Loading default event ❯ ${eventName}`);
+    }
   }
 }
 
