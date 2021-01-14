@@ -3,7 +3,7 @@ const { join } = require("path");
 const {
   checkProperties,
   checkPermissions,
-  checkEvents,
+  checkEvent,
 } = require("hkutilities/src/functions/validate");
 let loadedEvents = [];
 
@@ -19,7 +19,7 @@ function eventHandler(bot, dir) {
       if (file.endsWith(".js")) {
         const event = require(join(dir, file));
         const eventName = file.split(".")[0];
-        if (checkEvents(eventName)) {
+        if (checkEvent(eventName)) {
           bot.on(eventName, event.bind(null, bot));
           console.log(`HKUtilities ❯ Loading event ❯ ${eventName}`);
           loadedEvents.push(eventName);
