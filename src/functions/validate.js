@@ -28,7 +28,7 @@ function checkProperties(commandName, command) {
   }
   //owner only
   if (command.hasOwnProperty("ownerOnly")) {
-    if (isNaN(command.cooldown)) {
+    if (typeof command.ownerOnly != "boolean") {
       throw new Error(
         `HKUtilities ❯ ${commandName} ❯ Owner Only should be a boolean ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord`
       );

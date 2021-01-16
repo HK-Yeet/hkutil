@@ -78,12 +78,28 @@ module.exports = (bot, hkandler, message) => {
       );
     }
   }
+
+  if (command.maxArgs) {
+    if (args.length > command.maxArgs) {
+      return errorEmbed(
+        message.channel,
+        `Improper Syntax\nUse \`${
+          command.usage
+            ? `${prefix}${command.name} ${command.usage}`
+            : `${prefix}help ${command.name}`
+        }\``
+      );
+    }
+  }
   if (typeof hkandler.owners === "string") {
     hkandler.owners = [hkandler.owners];
   }
-  if(command.ownerOnly){
+  if (command.ownerOnly) {
     if (!hkandler.owners.includes(message.author.id)) {
-      return errorEmbed(message.channel, "You are not authorized to use this command");
+      return errorEmbed(
+        message.channel,
+        "You are not authorized to use this command"
+      );
     }
   }
   if (!hkandler.owners.includes(message.author.id)) {
