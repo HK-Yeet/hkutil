@@ -14,19 +14,22 @@ Inside your main file
 
 ```js
 const { Client } = require("discord.js");
-const HKutil = require("hkutilities");
-const config = require("./config.json");
+const { HKandler } = require("hkutilities");
+const { prefix, token } = require("./config.json");
 const bot = new Client();
 
-new HKutil.HKandler(bot, "commands", "events")
-  .setPrefix(config.prefix) //set a prefix; ! is default
-  .setFeatures("features"); //more about it below!
-/*
-optional: pass in your commands and events directory so that the handler will know where to which folders to go to
-it is defaulted to "commands" and "events
-*/
+new HKandler(bot, {
+  commandsDir: "commands",
+  eventsDir: "events",
+  featuresDir: "features",
+})
+  .setPrefix(prefix) //set a prefix; ! is default
+  .setOwners(["12345"]) // array of bot owners
+  .setDefaultCooldown(5) //set default command cooldown
+  .setMentionPrefix(true) //mention the bot instead of using the prefix Note: Prefix and Mentioning bot will work
 
-bot.login(config.token);
+
+bot.login(token);
 ```
 
 Inside config.json
@@ -46,7 +49,7 @@ Example of a ready event
 
 ```js
 //inside your events directory
-module.exports = (bot) => {
+module.exports = (bot, hkandler) => {
   console.log(`Logged in as ${bot.user.tag}`);
 };
 ```
@@ -57,9 +60,8 @@ Example of a message event
 //inside your events directory
 
 const HKutil = require("hkutilities");
-const config = require("../config.json");
-module.exports = (bot, message) => {
-  const { prefix } = config;
+module.exports = (bot, hkandler,message) => {
+  const { prefix } = hkandler;
   /*
   let's use the cannon filter to check if message is from a bot or the message is in dm's
   filter takes 1 paramter; message
@@ -70,7 +72,10 @@ module.exports = (bot, message) => {
   const commandName = args.shift().toLowerCase();
 
   const command =
-    bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+    bot.commands.get(commandName) ||
+    bot.commands.find(
+      (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+    );
   if (!command) return;
 
   try {
@@ -97,7 +102,7 @@ const Discord = require("discord.js");
 module.exports = {
   name: "ping",
   aliases: ["pong", "p"], // Optional
-  execute(bot, message, args) {
+  execute(bot, message, args, hkandler) {
     let pingEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Pong!")
@@ -114,21 +119,17 @@ Features are a cool feature that Worn Off Keys made. They are side functions, th
 Example for a suggestions channel:
 
 ```js
-const HKutil = require("hkutilities");
-module.exports = (bot) => {
-
-  bot.on("message", message => {
-
-    if(HKutil.filter(message)) return
-    if(message.channel.name == "suggestions"){
+module.exports = (bot, hkandelr) => {
+  bot.on("message", (message) => {
+    if (message.author.bot) return;
+    if (message.channel.name == "suggestions") {
       message.react("✅");
       message.react("❌");
     }
-
-  })
-
-}
+  });
+};
 ```
+
 # Final Code
 
 With all that done, your treefile should look somthing similar to this.
@@ -146,6 +147,8 @@ HKBot/
 ┣ config.json
 ┣ index.js
 ┗ package.json
+
+```
 
 ```
 
