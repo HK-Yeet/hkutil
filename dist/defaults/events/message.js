@@ -10,9 +10,8 @@ module.exports = (bot, hkandler, message) => {
     let prefix = hkandler.prefix;
     const mentionRegexPrefix = RegExp(`^<@!?${bot.user.id}>`);
     if (hkandler.mentionPrefix) {
-        prefix = message.content.toLowerCase().match(mentionRegexPrefix)
-            ? message.content.match(mentionRegexPrefix)[0]
-            : hkandler.prefix;
+        if (message.content.toLowerCase().match(mentionRegexPrefix))
+            prefix = message.content.match(mentionRegexPrefix)[0];
     }
     if (!message.content.startsWith(prefix))
         return;

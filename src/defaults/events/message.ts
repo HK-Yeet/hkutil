@@ -17,9 +17,8 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
 
   const mentionRegexPrefix = RegExp(`^<@!?${bot.user!.id}>`);
   if (hkandler.mentionPrefix) {
-    prefix = message.content.toLowerCase().match(mentionRegexPrefix)
-      ? message.content.match(mentionRegexPrefix)![0]
-      : hkandler.prefix;
+    if (message.content.toLowerCase().match(mentionRegexPrefix))
+      prefix = message.content.match(mentionRegexPrefix)![0];
   }
 
   if (!message.content.startsWith(prefix)) return;
@@ -48,12 +47,14 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         !message.channel.permissionsFor(message.guild.me!)!.has(permission)
       ) {
         hasPermission = false;
-        return message.channel.send(`I do not have the proper permissions to run this command. I need \`${command.clientPerms
+        return message.channel.send(
+          `I do not have the proper permissions to run this command. I need \`${command.clientPerms
             .join(", ")
             .toLowerCase()
             .split(/_| /g)
             .map((s: any) => s.charAt(0).toUpperCase() + s.substring(1))
-            .join(" ")}\`!`);
+            .join(" ")}\`!`
+        );
       }
       if (hasPermission) {
         continue;
