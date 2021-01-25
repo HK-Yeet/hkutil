@@ -1,12 +1,7 @@
 import { Client, Collection } from "discord.js";
 import { join } from "path";
 import loadStuff from "../functions/handlers";
-
-type Directories = {
-  commandsDir?: string;
-  eventsDir?: string;
-  featuresDir?: string;
-};
+import { Directories } from "../types";
 
 class HKandler {
   private _commandsDir: string = "commands";
@@ -17,6 +12,7 @@ class HKandler {
   private _defaultCooldown: number = 3;
   private _owners: String[] = [""];
   private _commands: any = new Collection();
+  private _helpDescription: any = null;
   constructor(bot: Client, options: Directories) {
     if (!bot) {
       throw new Error(
@@ -24,17 +20,15 @@ class HKandler {
       );
     }
 
-    let { commandsDir, eventsDir, featuresDir } = options;
-
-    if (!commandsDir) {
+    if (!options.commandsDir) {
       console.warn(
         'HKUtilities ❯ No commands folder prvided, using "commands"'
       );
     }
-    if (!eventsDir) {
+    if (!options.eventsDir) {
       console.warn('HKUtilities ❯ No events folder provided, using "events"');
     }
-    if (!featuresDir) {
+    if (!options.featuresDir) {
       console.warn(
         'HKUtilities ❯ No features folder provided, using "features"'
       );
@@ -45,9 +39,9 @@ class HKandler {
       if (path) {
         loadStuff(
           bot,
-          join(path, commandsDir || this._commandsDir),
-          join(path, eventsDir || this._eventsDir),
-          join(path, featuresDir || this._featuresDir),
+          join(path, options.commandsDir || this._commandsDir),
+          join(path, options.eventsDir || this._eventsDir),
+          join(path, options.featuresDir || this._featuresDir),
           this
         );
       }
@@ -84,6 +78,12 @@ class HKandler {
   public get defaultCooldown() {
     return this._defaultCooldown;
   }
+  public setHelpDescription(helpDescription: string) {
+    this._helpDescription = helpDescription;
+    return this;
+  }
+  public get helpDescription() {
+    return this._helpDescription;
+  }
 }
-
 export = HKandler;

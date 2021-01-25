@@ -15,23 +15,23 @@ class HKandler {
         this._defaultCooldown = 3;
         this._owners = [""];
         this._commands = new discord_js_1.Collection();
+        this._helpDescription = null;
         if (!bot) {
             throw new Error("HKUtilities ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord");
         }
-        let { commandsDir, eventsDir, featuresDir } = options;
-        if (!commandsDir) {
+        if (!options.commandsDir) {
             console.warn('HKUtilities ❯ No commands folder prvided, using "commands"');
         }
-        if (!eventsDir) {
+        if (!options.eventsDir) {
             console.warn('HKUtilities ❯ No events folder provided, using "events"');
         }
-        if (!featuresDir) {
+        if (!options.featuresDir) {
             console.warn('HKUtilities ❯ No features folder provided, using "features"');
         }
         if (module && require.main) {
             const { path } = require.main;
             if (path) {
-                handlers_1.default(bot, path_1.join(path, commandsDir || this._commandsDir), path_1.join(path, eventsDir || this._eventsDir), path_1.join(path, featuresDir || this._featuresDir), this);
+                handlers_1.default(bot, path_1.join(path, options.commandsDir || this._commandsDir), path_1.join(path, options.eventsDir || this._eventsDir), path_1.join(path, options.featuresDir || this._featuresDir), this);
             }
         }
     }
@@ -65,6 +65,13 @@ class HKandler {
     }
     get defaultCooldown() {
         return this._defaultCooldown;
+    }
+    setHelpDescription(helpDescription) {
+        this._helpDescription = helpDescription;
+        return this;
+    }
+    get helpDescription() {
+        return this._helpDescription;
     }
 }
 module.exports = HKandler;

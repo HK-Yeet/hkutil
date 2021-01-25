@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
+    "watch": true,
     "target": "es2020",
     "module": "commonjs",
     "outDir": "./dist",

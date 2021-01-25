@@ -34,12 +34,14 @@ module.exports = (bot, hkandler, message) => {
             if (message.channel.type != "dm" &&
                 !message.channel.permissionsFor(message.guild.me).has(permission)) {
                 hasPermission = false;
-                return message.channel.send(`I do not have the proper permissions to run this command. I need \`${command.clientPerms
+                return message.channel
+                    .send(`I do not have the proper permissions to run this command. I need \`${command.clientPerms
                     .join(", ")
                     .toLowerCase()
                     .split(/_| /g)
                     .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join(" ")}\`!`);
+                    .join(" ")}\`!`)
+                    .catch((O_o) => { });
             }
             if (hasPermission) {
                 continue;
@@ -64,8 +66,7 @@ module.exports = (bot, hkandler, message) => {
                     .split(/_| /g)
                     .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
                     .join(" ")}!`);
-                message.channel.send(embed).catch((O_o) => { });
-                return;
+                return message.channel.send(embed).catch((O_o) => { });
             }
             if (hasPermission) {
                 continue;
@@ -80,8 +81,7 @@ module.exports = (bot, hkandler, message) => {
                 .setDescription(`Improper Syntax\nUse \`${command.usage
                 ? `${prefix}${command.name} ${command.usage}`
                 : `${prefix}help ${command.name}`}\``);
-            message.channel.send(embed).catch((O_o) => { });
-            return;
+            return message.channel.send(embed).catch((O_o) => { });
         }
     }
     if (command.maxArgs) {
@@ -92,8 +92,7 @@ module.exports = (bot, hkandler, message) => {
                 .setDescription(`Improper Syntax\nUse \`${command.usage
                 ? `${prefix}${command.name} ${command.usage}`
                 : `${prefix}help ${command.name}`}\``);
-            message.channel.send(embed).catch((O_o) => { });
-            return;
+            return message.channel.send(embed).catch((O_o) => { });
         }
     }
     if (command.ownerOnly) {
@@ -102,7 +101,7 @@ module.exports = (bot, hkandler, message) => {
                 .setTitle("❌・ Error")
                 .setColor("RED")
                 .setDescription(`You are not authorized to use this command`);
-            message.channel.send(embed).catch((O_o) => { });
+            return message.channel.send(embed).catch((O_o) => { });
         }
     }
     if (!hkandler.owners.includes(message.author.id)) {
@@ -120,7 +119,7 @@ module.exports = (bot, hkandler, message) => {
                     .setTitle("❌・ Error")
                     .setColor("RED")
                     .setDescription(`Slow down there buddy! Please wait \`${remaining}\` before using ${command.name}`);
-                message.channel.send(embed).catch((O_o) => { });
+                return message.channel.send(embed).catch((O_o) => { });
             }
         }
         timestamps.set(message.author.id, now);

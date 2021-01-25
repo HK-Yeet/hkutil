@@ -15,12 +15,24 @@ module.exports = {
   ) => {
     if (!args.length) {
       const categories: any = new Collection();
-
+      const helpDescription = `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${hkandler.prefix}help <command>`;
       hkandler.commands.forEach((command: any) => {
         if (command.hidden && !message.member.hasPermission("ADMINISTRATOR"))
           return;
         if (command.ownerOnly && !hkandler.owners.includes(message.author.id))
           return;
+        if (command.userPerms) {
+          let { userPerms } = command;
+          if (typeof userPerms === "string") {
+            userPerms = [userPerms];
+          }
+
+          for (const permission of userPerms) {
+            if (!message.member!.hasPermission(permission)) {
+              return;
+            }
+          }
+        }
         const category: Collection<string, string> = categories.get(
           `${command.category ? command.category.toLowerCase() : "misc"}`
         );
@@ -45,7 +57,11 @@ module.exports = {
       let embed = {
         color: message.guild.me.displayHexColor,
         author: { icon_url: bot.user!.displayAvatarURL(), name: "Commands" },
-        description: `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${hkandler.prefix}help <command>`,
+        description: `${
+          hkandler.helpDescription
+            ? hkandler.helpDescription.replace("{PREFIX}", `${hkandler.prefix}`)
+            : `${helpDescription}`
+        }`,
       };
       let msg = await message.channel.send({ embed: embed });
 
@@ -127,23 +143,30 @@ module.exports = {
         hkandler.commands.find(
           (cmd: any) => cmd.aliases && cmd.aliases.includes(commandName)
         );
-      if (!command) return;
-      let content = [];
-      for (var key in command) {
-        var value = command[key];
-        if (key == "name") continue;
-        if (key == "hidden") continue;
-        if (key == "execute" || key == "run" || key == "callback") continue;
-        content.push(`**${key}**: ${value}`);
-      }
+      if (!command)
+        return message.channel.send(`Not a valid command ${message.author}`);
+
       let embed = {
         color: message.guild.me.displayHexColor,
         author: { icon_url: bot.user!.displayAvatarURL(), name: command.name },
-        description: `${
-          content.sort().join("\n")
-            ? content.sort().join("\n")
-            : "No Details Given"
-        }`,
+        fields: [
+          {
+            name: "Aliases",
+            value: command.aliases.join(", "),
+          },
+          {
+            name: "Category",
+            value: command.category,
+          },
+          {
+            name: "Cooldown",
+            value: `${command.cooldown || hkandler.defaultCooldown} seconds`,
+          },
+          {
+            name: "Description",
+            value: `${command.description || "No description given"}`,
+          },
+        ],
       };
       message.channel.send({ embed: embed });
     }
