@@ -99,7 +99,7 @@ function loadDefaultCommands(bot: Client, hkandler: HKandler) {
         (cmd: any) => cmd.aliases && cmd.aliases.includes(commandName)
       )
     )
-      return;
+      continue;
     console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);
     hkandler.commands.set(command.name, command);
   }
