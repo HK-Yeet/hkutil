@@ -56,7 +56,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
               .map((s: any) => s.charAt(0).toUpperCase() + s.substring(1))
               .join(" ")}\`!`
           )
-          .catch((O_o) => {});
+          .catch((O_o: any) => {});
       }
       if (hasPermission) {
         continue;
@@ -85,7 +85,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
               .map((s: any) => s.charAt(0).toUpperCase() + s.substring(1))
               .join(" ")}!`
           );
-        return message.channel.send(embed).catch((O_o) => {});
+        return message.channel.send(embed).catch((O_o: any) => {});
       }
       if (hasPermission) {
         continue;
@@ -105,7 +105,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
               : `${prefix}help ${command.name}`
           }\``
         );
-      return message.channel.send(embed).catch((O_o) => {});
+      return message.channel.send(embed).catch((O_o: any) => {});
     }
   }
 
@@ -121,7 +121,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
               : `${prefix}help ${command.name}`
           }\``
         );
-      return message.channel.send(embed).catch((O_o) => {});
+      return message.channel.send(embed).catch((O_o: any) => {});
     }
   }
   if (command.ownerOnly) {
@@ -130,7 +130,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         .setTitle("❌・ Error")
         .setColor("RED")
         .setDescription(`You are not authorized to use this command`);
-      return message.channel.send(embed).catch((O_o) => {});
+      return message.channel.send(embed).catch((O_o: any) => {});
     }
   }
   if (!hkandler.owners.includes(message.author.id)) {
@@ -153,7 +153,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
           .setDescription(
             `Slow down there buddy! Please wait \`${remaining}\` before using ${command.name}`
           );
-        return message.channel.send(embed).catch((O_o) => {});
+        return message.channel.send(embed).catch((O_o: any) => {});
       }
     }
 
@@ -169,7 +169,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         .setTitle("❌・ Error")
         .setColor("RED")
         .setDescription(`${error}`);
-      message.channel.send(embed).catch((O_o) => {});
+      message.channel.send(embed).catch((O_o: any) => {});
     }
   } else if (command.callback) {
     try {
@@ -179,7 +179,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         .setTitle("❌・ Error")
         .setColor("RED")
         .setDescription(`${error}`);
-      message.channel.send(embed).catch((O_o) => {});
+      message.channel.send(embed).catch((O_o: any) => {});
     }
   } else if (command.run) {
     try {
@@ -189,7 +189,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         .setTitle("❌・ Error")
         .setColor("RED")
         .setDescription(`${error}`);
-      message.channel.send(embed).catch((O_o) => {});
+      message.channel.send(embed).catch((O_o: any) => {});
     }
   }
 };
