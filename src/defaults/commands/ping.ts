@@ -4,15 +4,9 @@ import HKandler from "../../structures/hkandler";
 module.exports = {
   name: "ping",
   category: "utilities",
-  ownerOnly: true,
   aliases: ["pong"],
   clientPerms: ["SEND_MESSAGES", "EMBED_LINKS"],
-  callback: async (
-    bot: Client,
-    message: Message,
-    args: String[],
-    hkandler: HKandler
-  ) => {
+  callback: async ({ bot, message }: { bot: Client; message: Message }) => {
     const msg = await message.channel.send(`Pinging...`);
     const pingEmbed = {
       title: "🏓 Pong!",

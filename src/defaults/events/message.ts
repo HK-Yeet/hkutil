@@ -5,8 +5,9 @@ import {
   HumanizeDuration,
 } from "humanize-duration-ts";
 
-const langService: HumanizeDurationLanguage = new HumanizeDurationLanguage();
-const humanizer: HumanizeDuration = new HumanizeDuration(langService);
+const humanizer: HumanizeDuration = new HumanizeDuration(
+  new HumanizeDurationLanguage()
+);
 
 const cooldowns = new Collection();
 
@@ -146,7 +147,9 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
       const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
       if (now < expirationTime) {
-        const remaining = humanizer.humanize(expirationTime - now);
+        const remaining = humanizer.humanize(expirationTime - now, {
+          largest: 1,
+        });
         let embed = new MessageEmbed()
           .setTitle("❌・ Error")
           .setColor("RED")
@@ -161,9 +164,12 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
   }
 
+  let client = bot;
+  let paramters: object = { bot, client, message, args, hkandler };
+
   if (command.execute) {
     try {
-      command.execute(bot, message, args, hkandler);
+      command.execute(paramters);
     } catch (error) {
       let embed = new MessageEmbed()
         .setTitle("❌・ Error")
@@ -173,7 +179,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
     }
   } else if (command.callback) {
     try {
-      command.callback(bot, message, args, hkandler);
+      command.callback(paramters);
     } catch (error) {
       let embed = new MessageEmbed()
         .setTitle("❌・ Error")
@@ -183,7 +189,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
     }
   } else if (command.run) {
     try {
-      command.run(bot, message, args, hkandler);
+      command.run(paramters);
     } catch (error) {
       let embed = new MessageEmbed()
         .setTitle("❌・ Error")

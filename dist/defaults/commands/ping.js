@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
     name: "ping",
     category: "utilities",
-    ownerOnly: true,
     aliases: ["pong"],
     clientPerms: ["SEND_MESSAGES", "EMBED_LINKS"],
-    callback: async (bot, message, args, hkandler) => {
+    callback: async ({ bot, message }) => {
         const msg = await message.channel.send(`Pinging...`);
         const pingEmbed = {
             title: "🏓 Pong!",

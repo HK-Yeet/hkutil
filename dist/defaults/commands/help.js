@@ -7,7 +7,7 @@ module.exports = {
     category: "utilities",
     hidden: true,
     clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
-    callback: async (bot, message, args, hkandler) => {
+    callback: async ({ message, args, hkandler, bot, }) => {
         if (!args.length) {
             const categories = new discord_js_1.Collection();
             const helpDescription = `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${hkandler.prefix}help <command>`;
@@ -27,12 +27,12 @@ module.exports = {
                         }
                     }
                 }
-                const category = categories.get(`${command.category ? command.category.toLowerCase() : "misc"}`);
+                const category = categories.get(`${command.category ? command.category.toLowerCase() : "Uncategorized"}`);
                 if (category) {
                     category.set(command.name, command);
                 }
                 else {
-                    categories.set(`${command.category ? command.category.toLowerCase() : "misc"}`, new discord_js_1.Collection().set(command.name, command));
+                    categories.set(`${command.category ? command.category.toLowerCase() : "Uncategorized"}`, new discord_js_1.Collection().set(command.name, command));
                 }
             });
             let pageTitle = Array.from(categories.map((category, name) => name));
@@ -112,11 +112,11 @@ module.exports = {
                 fields: [
                     {
                         name: "Aliases",
-                        value: command.aliases.join(", "),
+                        value: command.aliases.join(", ") || "None",
                     },
                     {
                         name: "Category",
-                        value: command.category,
+                        value: command.category || "Uncategorized",
                     },
                     {
                         name: "Cooldown",

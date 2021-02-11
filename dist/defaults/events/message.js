@@ -1,8 +1,7 @@
 "use strict";
 const discord_js_1 = require("discord.js");
 const humanize_duration_ts_1 = require("humanize-duration-ts");
-const langService = new humanize_duration_ts_1.HumanizeDurationLanguage();
-const humanizer = new humanize_duration_ts_1.HumanizeDuration(langService);
+const humanizer = new humanize_duration_ts_1.HumanizeDuration(new humanize_duration_ts_1.HumanizeDurationLanguage());
 const cooldowns = new discord_js_1.Collection();
 module.exports = (bot, hkandler, message) => {
     if (!message.guild || message.author.bot)
@@ -114,7 +113,9 @@ module.exports = (bot, hkandler, message) => {
         if (timestamps.has(message.author.id)) {
             const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
             if (now < expirationTime) {
-                const remaining = humanizer.humanize(expirationTime - now);
+                const remaining = humanizer.humanize(expirationTime - now, {
+                    largest: 1,
+                });
                 let embed = new discord_js_1.MessageEmbed()
                     .setTitle("❌・ Error")
                     .setColor("RED")
@@ -125,9 +126,11 @@ module.exports = (bot, hkandler, message) => {
         timestamps.set(message.author.id, now);
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     }
+    let client = bot;
+    let paramters = { bot, client, message, args, hkandler };
     if (command.execute) {
         try {
-            command.execute(bot, message, args, hkandler);
+            command.execute(paramters);
         }
         catch (error) {
             let embed = new discord_js_1.MessageEmbed()
@@ -139,7 +142,7 @@ module.exports = (bot, hkandler, message) => {
     }
     else if (command.callback) {
         try {
-            command.callback(bot, message, args, hkandler);
+            command.callback(paramters);
         }
         catch (error) {
             let embed = new discord_js_1.MessageEmbed()
@@ -151,7 +154,7 @@ module.exports = (bot, hkandler, message) => {
     }
     else if (command.run) {
         try {
-            command.run(bot, message, args, hkandler);
+            command.run(paramters);
         }
         catch (error) {
             let embed = new discord_js_1.MessageEmbed()

@@ -84,7 +84,7 @@ function loadDefaultCommands(bot, hkandler) {
         const commandName = command.name;
         if (hkandler.commands.get(commandName) ||
             hkandler.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName)))
-            return;
+            continue;
         console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);
         hkandler.commands.set(command.name, command);
     }

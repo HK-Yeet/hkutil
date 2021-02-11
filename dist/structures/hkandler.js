@@ -19,19 +19,21 @@ class HKandler {
         if (!bot) {
             throw new Error("HKUtilities ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord");
         }
-        if (!options.commandsDir) {
-            console.warn('HKUtilities ❯ No commands folder prvided, using "commands"');
-        }
-        if (!options.eventsDir) {
-            console.warn('HKUtilities ❯ No events folder provided, using "events"');
-        }
-        if (!options.featuresDir) {
-            console.warn('HKUtilities ❯ No features folder provided, using "features"');
+        if (options) {
+            if (options.commandsDir) {
+                this._commandsDir = options.commandsDir;
+            }
+            if (options.eventsDir) {
+                this._eventsDir = options.eventsDir;
+            }
+            if (options.featuresDir) {
+                this._featuresDir = options.featuresDir;
+            }
         }
         if (module && require.main) {
             const { path } = require.main;
             if (path) {
-                handlers_1.default(bot, path_1.join(path, options.commandsDir || this._commandsDir), path_1.join(path, options.eventsDir || this._eventsDir), path_1.join(path, options.featuresDir || this._featuresDir), this);
+                handlers_1.default(bot, path_1.join(path, this._commandsDir), path_1.join(path, this._eventsDir), path_1.join(path, this._featuresDir), this);
             }
         }
     }

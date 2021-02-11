@@ -20,18 +20,16 @@ class HKandler {
       );
     }
 
-    if (!options.commandsDir) {
-      console.warn(
-        'HKUtilities ❯ No commands folder prvided, using "commands"'
-      );
-    }
-    if (!options.eventsDir) {
-      console.warn('HKUtilities ❯ No events folder provided, using "events"');
-    }
-    if (!options.featuresDir) {
-      console.warn(
-        'HKUtilities ❯ No features folder provided, using "features"'
-      );
+    if (options) {
+      if (options.commandsDir) {
+        this._commandsDir = options.commandsDir;
+      }
+      if (options.eventsDir) {
+        this._eventsDir = options.eventsDir;
+      }
+      if (options.featuresDir) {
+        this._featuresDir = options.featuresDir;
+      }
     }
 
     if (module && require.main) {
@@ -39,9 +37,9 @@ class HKandler {
       if (path) {
         loadStuff(
           bot,
-          join(path, options.commandsDir || this._commandsDir),
-          join(path, options.eventsDir || this._eventsDir),
-          join(path, options.featuresDir || this._featuresDir),
+          join(path, this._commandsDir),
+          join(path, this._eventsDir),
+          join(path, this._featuresDir),
           this
         );
       }

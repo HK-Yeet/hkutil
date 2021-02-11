@@ -45,14 +45,20 @@ Inside config.json
 
 There are currently two default commands, ping, and help. But this is an example on how you'd make a command.
 
-This is a simple ping command. Using `ping` and `pong` will run this command.
+This is a simple ping command. Using `ping` and `pong` will run this command. To execute commands, you can either have a run, execute, or callback. In all 3, you pass in an object, so you can use the following parameters in any order;
+
+- bot; your bot
+- client; also your bot, but for people who call it client
+- message; message parameter, obviously
+- args; the arguments, which is stored in an array
 
 ```js
 //inside your command directory
 const Discord = require("discord.js");
 module.exports = {
   name: "ping",
-  aliases: ["pong"],execute(bot, message, args, hkandler) {
+  aliases: ["pong"],
+  execute({ bot, message }) {
     let pingEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Pong!")
@@ -62,18 +68,18 @@ module.exports = {
 };
 ```
 
-Currently, the default message handler can handler the folowing command properties:
-  aliases - other names a command can be called
-  clientPerms - permissions required for bot to run
-  userPerms - permissions required by a user
-  minArgs - minimum amount of arguments required
-  maxArgs - maximum amoung of arguments (none by default)
-  ownerOnly - only bot owners can use (set by .setOwners())
-  cooldown - a cooldown for each command (5 is default, but can change with .setDefaultCooldown())
-
+Currently, the default message handler can handler the folowing optional command properties:
+aliases - other names a command can be called
+clientPerms - permissions required for bot to run
+userPerms - permissions required by a user
+minArgs - minimum amount of arguments required
+maxArgs - maximum amoung of arguments (none by default)
+ownerOnly - only bot owners can use (set by .setOwners())
+cooldown - a cooldown for each command (5 is default, but can change with .setDefaultCooldown())
 
 # Making Events
 
+In your events, you will have to pass in the following parameters, bot (or client), hkandler (which has useful information like prefix, ownerOnly, default cooldowns, and all your commands.)
 By default, there is a ready and message event. The message event is quite limitting, but I hopefully going to add a bunch more features into the message handler.
 
 Example of a ready event
@@ -145,7 +151,7 @@ With all that done, your treefile should look somthing similar to this.
 
 ```
 
-HKBot/
+CoolBot/
 ┣ commands/
 ┃ ┗ ping.js
 ┣ features/

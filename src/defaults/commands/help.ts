@@ -1,4 +1,4 @@
-import { Client, Collection, MessageEmbed } from "discord.js";
+import { Client, Collection, Message, MessageEmbed } from "discord.js";
 import HKandler from "../../structures/hkandler";
 
 module.exports = {
@@ -7,17 +7,22 @@ module.exports = {
   category: "utilities",
   hidden: true,
   clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
-  callback: async (
-    bot: Client,
-    message: any,
-    args: String[],
-    hkandler: HKandler
-  ) => {
+  callback: async ({
+    message,
+    args,
+    hkandler,
+    bot,
+  }: {
+    message: Message;
+    args: string[];
+    hkandler: HKandler;
+    bot: Client;
+  }) => {
     if (!args.length) {
       const categories: any = new Collection();
       const helpDescription = `Welcome to the help menu. Here, you will find all the commands that I have. Use the reactions to get your way around the menu. If you need help on one specific command, type ${hkandler.prefix}help <command>`;
       hkandler.commands.forEach((command: any) => {
-        if (command.hidden && !message.member.hasPermission("ADMINISTRATOR"))
+        if (command.hidden && !message.member!.hasPermission("ADMINISTRATOR"))
           return;
         if (command.ownerOnly && !hkandler.owners.includes(message.author.id))
           return;
@@ -34,13 +39,13 @@ module.exports = {
           }
         }
         const category: Collection<string, string> = categories.get(
-          `${command.category ? command.category.toLowerCase() : "misc"}`
+          `${command.category ? command.category.toLowerCase() : "Uncategorized"}`
         );
         if (category) {
           category.set(command.name, command);
         } else {
           categories.set(
-            `${command.category ? command.category.toLowerCase() : "misc"}`,
+            `${command.category ? command.category.toLowerCase() : "Uncategorized"}`,
             new Collection().set(command.name, command)
           );
         }
@@ -55,7 +60,7 @@ module.exports = {
       );
       let page = 0;
       let embed = {
-        color: message.guild.me.displayHexColor,
+        color: message.guild!.me!.displayHexColor,
         author: { icon_url: bot.user!.displayAvatarURL(), name: "Commands" },
         description: `${
           hkandler.helpDescription
@@ -102,7 +107,7 @@ module.exports = {
                   footer: {
                     text: `Page ${page} of ${pages.length}`,
                   },
-                  color: message.guild.me.displayHexColor,
+                  color: message.guild!.me!.displayHexColor,
                 };
 
                 msg.edit({ embed: edit });
@@ -122,7 +127,7 @@ module.exports = {
                   footer: {
                     text: `Page ${page} of ${pages.length}`,
                   },
-                  color: message.guild.me.displayHexColor,
+                  color: message.guild!.me!.displayHexColor,
                 };
 
                 msg.edit({ embed: edit });
@@ -147,16 +152,16 @@ module.exports = {
         return message.channel.send(`Not a valid command ${message.author}`);
 
       let embed = {
-        color: message.guild.me.displayHexColor,
+        color: message.guild!.me!.displayHexColor,
         author: { icon_url: bot.user!.displayAvatarURL(), name: command.name },
         fields: [
           {
             name: "Aliases",
-            value: command.aliases.join(", "),
+            value: command.aliases.join(", ") || "None",
           },
           {
             name: "Category",
-            value: command.category,
+            value: command.category || "Uncategorized",
           },
           {
             name: "Cooldown",
