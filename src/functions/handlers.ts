@@ -91,17 +91,19 @@ function loadDefaultCommands(bot: Client, hkandler: HKandler) {
   const dir = join(__dirname, "..", "defaults", "commands");
   const files = readdirSync(dir);
   for (const file of files) {
-    const command = require(join(dir, file));
-    const commandName = command.name;
-    if (
-      hkandler.commands.get(commandName) ||
-      hkandler.commands.find(
-        (cmd: any) => cmd.aliases && cmd.aliases.includes(commandName)
+    if (file.endsWith(".js")) {
+      const command = require(join(dir, file));
+      const commandName = command.name;
+      if (
+        hkandler.commands.get(commandName) ||
+        hkandler.commands.find(
+          (cmd: any) => cmd.aliases && cmd.aliases.includes(commandName)
+        )
       )
-    )
-      continue;
-    console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);
-    hkandler.commands.set(command.name, command);
+        continue;
+      console.log(`HKUtilities ❯ Loading default command ❯ ${commandName}`);
+      hkandler.commands.set(command.name, command);
+    }
   }
 }
 
@@ -109,11 +111,13 @@ function loadDefaultEvents(bot: Client, hkandler: HKandler) {
   const dir = join(__dirname, "..", "defaults", "events");
   const files = readdirSync(dir);
   for (const file of files) {
-    const event = require(join(dir, file));
-    const eventName = file.split(".")[0];
-    if (!loadedEvents.includes(eventName)) {
-      bot.on(eventName, event.bind(null, bot, hkandler));
-      console.log(`HKUtilities ❯ Loading default event ❯ ${eventName}`);
+    if (file.endsWith(".js")) {
+      const event = require(join(dir, file));
+      const eventName = file.split(".")[0];
+      if (!loadedEvents.includes(eventName)) {
+        bot.on(eventName, event.bind(null, bot, hkandler));
+        console.log(`HKUtilities ❯ Loading default event ❯ ${eventName}`);
+      }
     }
   }
 }
