@@ -1,7 +1,12 @@
 import { Client, Collection } from "discord.js";
 import { join } from "path";
 import loadStuff from "../functions/handlers";
-import { Directories } from "../types";
+
+type Directories = {
+  commandsDir?: string;
+  eventsDir?: string;
+  featuresDir?: string;
+};
 
 class HKandler {
   private _commandsDir: string = "commands";
@@ -13,22 +18,22 @@ class HKandler {
   private _owners: String[] = [""];
   private _commands: any = new Collection();
   private _helpDescription: any = null;
-  constructor(bot: Client, options: Directories) {
+  constructor(bot: Client, directories: Directories) {
     if (!bot) {
       throw new Error(
         "HKUtilities ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord"
       );
     }
 
-    if (options) {
-      if (options.commandsDir) {
-        this._commandsDir = options.commandsDir;
+    if (directories) {
+      if (directories.commandsDir) {
+        this._commandsDir = directories.commandsDir;
       }
-      if (options.eventsDir) {
-        this._eventsDir = options.eventsDir;
+      if (directories.eventsDir) {
+        this._eventsDir = directories.eventsDir;
       }
-      if (options.featuresDir) {
-        this._featuresDir = options.featuresDir;
+      if (directories.featuresDir) {
+        this._featuresDir = directories.featuresDir;
       }
     }
 

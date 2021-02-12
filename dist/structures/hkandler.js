@@ -6,7 +6,7 @@ const discord_js_1 = require("discord.js");
 const path_1 = require("path");
 const handlers_1 = __importDefault(require("../functions/handlers"));
 class HKandler {
-    constructor(bot, options) {
+    constructor(bot, directories) {
         this._commandsDir = "commands";
         this._eventsDir = "events";
         this._featuresDir = "features";
@@ -19,15 +19,15 @@ class HKandler {
         if (!bot) {
             throw new Error("HKUtilities ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord");
         }
-        if (options) {
-            if (options.commandsDir) {
-                this._commandsDir = options.commandsDir;
+        if (directories) {
+            if (directories.commandsDir) {
+                this._commandsDir = directories.commandsDir;
             }
-            if (options.eventsDir) {
-                this._eventsDir = options.eventsDir;
+            if (directories.eventsDir) {
+                this._eventsDir = directories.eventsDir;
             }
-            if (options.featuresDir) {
-                this._featuresDir = options.featuresDir;
+            if (directories.featuresDir) {
+                this._featuresDir = directories.featuresDir;
             }
         }
         if (module && require.main) {
