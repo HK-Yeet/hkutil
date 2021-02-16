@@ -7,6 +7,7 @@ module.exports = {
     category: "utilities",
     hidden: true,
     clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
+    description: "Shows all of the commands",
     callback: async ({ message, args, hkandler, bot, }) => {
         if (!args.length) {
             const categories = new discord_js_1.Collection();

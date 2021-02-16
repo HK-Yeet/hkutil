@@ -23,12 +23,24 @@ class HKandler {
             if (directories.commandsDir) {
                 this._commandsDir = directories.commandsDir;
             }
+            else {
+                console.warn('HKUtilities ❯ No commands directory provided ❯ Using "commands"');
+            }
             if (directories.eventsDir) {
                 this._eventsDir = directories.eventsDir;
+            }
+            else {
+                console.warn('HKUtilities ❯ No events directory provided ❯ Using "cevents"');
             }
             if (directories.featuresDir) {
                 this._featuresDir = directories.featuresDir;
             }
+            else {
+                console.warn('HKUtilities ❯ No features directory provided ❯ Using "features"');
+            }
+        }
+        else {
+            console.warn("HKUtilities ❯ No directories given ❯ Using defaults");
         }
         if (module && require.main) {
             const { path } = require.main;

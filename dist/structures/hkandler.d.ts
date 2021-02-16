@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { Client, Collection } from "discord.js";
 declare type Directories = {
     commandsDir?: string;
     eventsDir?: string;
@@ -14,10 +14,10 @@ declare class HKandler {
     private _owners;
     private _commands;
     private _helpDescription;
-    constructor(bot: Client, directories: Directories);
-    get commands(): any;
-    setOwners(owners: String[]): this;
-    get owners(): String[];
+    constructor(bot: Client, directories?: Directories);
+    get commands(): Collection<any, any>;
+    setOwners(owners: string[]): this;
+    get owners(): string[];
     setPrefix(prefix: string): this;
     get prefix(): string;
     setMentionPrefix(mentionPrefix: boolean): this;
@@ -25,6 +25,6 @@ declare class HKandler {
     setDefaultCooldown(cooldown: number): this;
     get defaultCooldown(): number;
     setHelpDescription(helpDescription: string): this;
-    get helpDescription(): any;
+    get helpDescription(): string | null;
 }
 export = HKandler;

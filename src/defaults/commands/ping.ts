@@ -6,17 +6,17 @@ module.exports = {
   category: "utilities",
   aliases: ["pong"],
   clientPerms: ["SEND_MESSAGES", "EMBED_LINKS"],
+  description: "Returns bot latency",
   callback: async ({ bot, message }: { bot: Client; message: Message }) => {
     const msg = await message.channel.send(`Pinging...`);
     const pingEmbed = {
       title: "🏓 Pong!",
-      description: `Latency is ${Math.floor(
+      description: `Edit Latency is ${Math.floor(
         msg.createdTimestamp - message.createdTimestamp
       )}ms\nAPI Latency is ${Math.round(bot.ws.ping)}ms`,
       color: "RED",
     };
 
-    msg.edit({ embed: pingEmbed });
-    msg.edit("\u200B");
+    msg.edit("\u200B", { embed: pingEmbed });
   },
 };

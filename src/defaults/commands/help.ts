@@ -7,6 +7,7 @@ module.exports = {
   category: "utilities",
   hidden: true,
   clientPerms: ["EMBED_LINKS", "SEND_MESSAGES", "ADD_REACTIONS"],
+  description: "Shows all of the commands",
   callback: async ({
     message,
     args,

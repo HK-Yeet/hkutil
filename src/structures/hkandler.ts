@@ -15,26 +15,39 @@ class HKandler {
   private _prefix: string = "!";
   private _mentionPreix: boolean = false;
   private _defaultCooldown: number = 3;
-  private _owners: String[] = [""];
-  private _commands: any = new Collection();
-  private _helpDescription: any = null;
-  constructor(bot: Client, directories: Directories) {
+  private _owners: string[] = [""];
+  private _commands: Collection<any, any> = new Collection();
+  private _helpDescription: string | null = null;
+  constructor(bot: Client, directories?: Directories) {
     if (!bot) {
       throw new Error(
         "HKUtilities ❯ No Discord.JS Client provided ❯ Need further assistance? Join the discord https://hk-yeet.github.io/discord"
       );
     }
-
     if (directories) {
       if (directories.commandsDir) {
         this._commandsDir = directories.commandsDir;
+      } else {
+        console.warn(
+          'HKUtilities ❯ No commands directory provided ❯ Using "commands"'
+        );
       }
       if (directories.eventsDir) {
         this._eventsDir = directories.eventsDir;
+      } else {
+        console.warn(
+          'HKUtilities ❯ No events directory provided ❯ Using "cevents"'
+        );
       }
       if (directories.featuresDir) {
         this._featuresDir = directories.featuresDir;
+      } else {
+        console.warn(
+          'HKUtilities ❯ No features directory provided ❯ Using "features"'
+        );
       }
+    } else {
+      console.warn("HKUtilities ❯ No directories given ❯ Using defaults");
     }
 
     if (module && require.main) {
@@ -53,7 +66,7 @@ class HKandler {
   public get commands() {
     return this._commands;
   }
-  public setOwners(owners: String[]) {
+  public setOwners(owners: string[]) {
     this._owners = owners;
     return this;
   }
