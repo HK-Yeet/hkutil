@@ -23,7 +23,8 @@ function commandHandler(bot, dir, hkandler) {
             commandHandler(bot, path_1.join(dir, file), hkandler);
         }
         else {
-            if (file.endsWith(".js")) {
+            if (file.endsWith(".js") ||
+                (file.endsWith(".ts") && !file.endsWith(".d.ts"))) {
                 const fileName = file.split(".")[0];
                 const command = require(path_1.join(dir, file));
                 const commandName = command.name;
@@ -45,7 +46,8 @@ function eventHandler(bot, dir, hkandler) {
             eventHandler(bot, path_1.join(dir, file), hkandler);
         }
         else {
-            if (file.endsWith(".js")) {
+            if (file.endsWith(".js") ||
+                (file.endsWith(".ts") && !file.endsWith(".d.ts"))) {
                 const event = require(path_1.join(dir, file));
                 const eventName = file.split(".")[0];
                 if (validate_1.checkEvent(eventName)) {
@@ -67,7 +69,8 @@ function featureHandler(bot, dir, hkandler) {
             featureHandler(bot, path_1.join(dir, file), hkandler);
         }
         else {
-            if (file.endsWith(".js")) {
+            if (file.endsWith(".js") ||
+                (file.endsWith(".ts") && !file.endsWith(".d.ts"))) {
                 const feature = require(path_1.join(dir, file));
                 const featureName = file.split(".")[0];
                 console.log(`HKUtilities ❯ Loading feature ❯ ${featureName}`);
@@ -80,7 +83,8 @@ function loadDefaultCommands(bot, hkandler) {
     const dir = path_1.join(__dirname, "..", "defaults", "commands");
     const files = fs_1.readdirSync(dir);
     for (const file of files) {
-        if (file.endsWith(".js")) {
+        if (file.endsWith(".js") ||
+            (file.endsWith(".ts") && !file.endsWith(".d.ts"))) {
             const command = require(path_1.join(dir, file));
             const commandName = command.name;
             if (hkandler.commands.get(commandName) ||
@@ -95,7 +99,8 @@ function loadDefaultEvents(bot, hkandler) {
     const dir = path_1.join(__dirname, "..", "defaults", "events");
     const files = fs_1.readdirSync(dir);
     for (const file of files) {
-        if (file.endsWith(".js")) {
+        if (file.endsWith(".js") ||
+            (file.endsWith(".ts") && !file.endsWith(".d.ts"))) {
             const event = require(path_1.join(dir, file));
             const eventName = file.split(".")[0];
             if (!loadedEvents.includes(eventName)) {
