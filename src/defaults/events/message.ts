@@ -12,7 +12,8 @@ const humanizer: HumanizeDuration = new HumanizeDuration(
 const cooldowns = new Collection();
 
 export = (bot: Client, hkandler: HKandler, message: Message) => {
-  if (!message.guild || message.author.bot) return;
+  if (!message.guild || message.author.bot || message.channel.type == "dm")
+    return;
 
   let prefix = hkandler.prefix;
 
@@ -43,10 +44,7 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
     }
 
     for (const permission of clientPerms) {
-      if (
-        message.channel.type != "dm" &&
-        !message.channel.permissionsFor(message.guild.me!)!.has(permission)
-      ) {
+      if (!message.channel.permissionsFor(message.guild.me!)!.has(permission)) {
         hasPermission = false;
         return message.channel
           .send(
@@ -92,6 +90,14 @@ export = (bot: Client, hkandler: HKandler, message: Message) => {
         continue;
       }
     }
+  }
+
+  if (!message.channel.nsfw && command.nsfw) {
+    let embed = new MessageEmbed()
+      .setTitle("❌・ Error")
+      .setColor("RED")
+      .setDescription("You can only use this command in NSFW channels.");
+    return message.channel.send(embed).catch((O_o: any) => {});
   }
 
   if (command.minArgs) {
